@@ -41,12 +41,11 @@
         .fade-up { animation: fadeUp 0.45s cubic-bezier(0.16,1,0.3,1); }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
         .stat-glow { box-shadow: var(--shadow-card); }
-        .timeline-line { position: absolute; left: 15px; top: 32px; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--accent) 0%, var(--timeline-grad-end) 100%); }
-        .timeline-dot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--accent); background: var(--dot-bg); position: absolute; left: 10px; top: 4px; z-index: 1; }
         .law-toggle { cursor: pointer; }
-        .law-content { max-height: 0; overflow: hidden; transition: max-height 0.35s cubic-bezier(0.16,1,0.3,1), padding 0.35s; }
-        .law-toggle.open + .law-content { max-height: 300px; padding-top: 12px; }
-        .law-toggle.open .law-arrow { transform: rotate(180deg); }
+        .law-content { max-height: 0; overflow: hidden; transition: max-height 0.35s cubic-bezier(0.16,1,0.3,1), padding 0.35s, opacity 0.3s; opacity: 0; }
+        .law-content.open { max-height: 300px; opacity: 1; }
+        .law-arrow { transition: transform 0.3s ease; }
+        .law-toggle[aria-expanded="true"] .law-arrow { transform: rotate(180deg); }
         input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
         input[type="number"] { -moz-appearance: textfield; }
         .chart-box { position: relative; height: 300px; width: 100%; }
@@ -150,22 +149,26 @@
 
                 <!-- Stats Row -->
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
-                    <div class="border rounded-xl p-4 stat-glow" style="background:var(--bg-card);border-color:var(--border-main);">
+                    <button onclick="app.go('cures')" class="border rounded-xl p-4 text-left cursor-pointer hover:opacity-80 transition" style="background:var(--bg-card);border-color:var(--border-main);">
                         <p class="text-[10px] uppercase tracking-widest font-medium" style="color:var(--text-label);" data-km="វិធីព្យាបាល" data-en="CURES">វិធីព្យាបាល</p>
                         <p class="text-3xl font-display font-black mt-1" style="color:var(--accent);">7</p>
-                    </div>
-                    <div class="border rounded-xl p-4 stat-glow" style="background:var(--bg-card);border-color:var(--border-main);">
+                        <p class="text-[10px] mt-1" style="color:var(--text-label);" data-km="វិធីព្យាបាលផ្លូវចិត្ត" data-en="Mental Cures">វិធីព្យាបាលផ្លូវចិត្ត</p>
+                    </button>
+                    <button onclick="app.go('laws')" class="border rounded-xl p-4 text-left cursor-pointer hover:opacity-80 transition" style="background:var(--bg-card);border-color:var(--border-main);">
                         <p class="text-[10px] uppercase tracking-widest font-medium" style="color:var(--text-label);" data-km="ច្បាប់មាស" data-en="LAWS">ច្បាប់មាស</p>
                         <p class="text-3xl font-display font-black mt-1" style="color:var(--accent);">5</p>
-                    </div>
-                    <div class="border rounded-xl p-4 stat-glow" style="background:var(--bg-card);border-color:var(--border-main);">
+                        <p class="text-[10px] mt-1" style="color:var(--text-label);" data-km="ច្បាប់នៃមាស" data-en="Laws of Gold">ច្បាប់នៃមាស</p>
+                    </button>
+                    <button onclick="app.go('calc')" class="border rounded-xl p-4 text-left cursor-pointer hover:opacity-80 transition" style="background:var(--bg-card);border-color:var(--border-main);">
                         <p class="text-[10px] uppercase tracking-widest font-medium" style="color:var(--text-label);" data-km="រូបមន្ត" data-en="FORMULA">រូបមន្ត</p>
                         <p class="text-2xl font-display font-black mt-1.5" style="color:var(--accent);">10/20/70</p>
-                    </div>
-                    <div class="border rounded-xl p-4 stat-glow" style="background:var(--bg-card);border-color:var(--border-main);">
+                        <p class="text-[10px] mt-1" style="color:var(--text-label);" data-km="បែងចែកថវិកា" data-en="Budget Split">បែងចែកថវិកា</p>
+                    </button>
+                    <button onclick="app.go('grow')" class="border rounded-xl p-4 text-left cursor-pointer hover:opacity-80 transition" style="background:var(--bg-card);border-color:var(--border-main);">
                         <p class="text-[10px] uppercase tracking-widest font-medium" style="color:var(--text-label);" data-km="ឧទាហរណ៍" data-en="EXAMPLE">ឧទាហរណ៍</p>
                         <p class="text-3xl font-display font-black mt-1" style="color:var(--green);">$500</p>
-                    </div>
+                        <p class="text-[10px] mt-1" style="color:var(--text-label);" data-km="ការលូតលាស់សន្សំ" data-en="Savings Growth">ការលូតលាស់សន្សំ</p>
+                    </button>
                 </div>
 
                 <!-- Chart -->
@@ -187,119 +190,99 @@
                     <h2 class="text-2xl md:text-3xl font-display font-black" style="color:var(--text-heading);" data-km="វិធីព្យាបាលផ្លូវចិត្ត ៧យ៉ាង" data-en="7 Cures for a Lean Purse">វិធីព្យាបាលផ្លូវចិត្ត ៧យ៉ាង</h2>
                 </div>
 
-                <div class="relative pl-10 space-y-6">
-                    <div class="timeline-line"></div>
+                <div class="relative pl-8 md:pl-12 space-y-4">
+                    <!-- Timeline vertical line -->
+                    <div class="absolute left-[14px] md:left-[20px] top-0 bottom-0 w-[2px]" style="background:linear-gradient(to bottom, var(--accent) 0%, var(--border-main) 100%);"></div>
 
                     <!-- Cure 1 -->
-                    <div class="relative">
-                        <div class="timeline-dot"></div>
-                        <div class="border rounded-xl p-5 ml-2" style="background:var(--bg-card);border-color:var(--border-main);">
-                            <div class="flex items-start gap-3">
-                                <span class="text-2xl font-display font-black leading-none shrink-0" style="color:var(--accent);opacity:0.3;">01</span>
-                                <div>
-                                    <h3 class="font-bold mb-1" style="color:var(--text-heading);" data-km="ចាប់ផ្តើមបំប៉ោងផ្លូវរបស់អ្នក" data-en="Start Thy Purse to Fattening">ចាប់ផ្តើមបំប៉ោងផ្លូវរបស់អ្នក</h3>
-                                    <p class="text-xs font-bold mb-2" style="color:var(--accent);" data-km="សន្សំ ១០% ភ្លាមៗ" data-en="Save 10% immediately">សន្សំ ១០% ភ្លាមៗ</p>
-                                    <p class="text-sm leading-relaxed" style="color:var(--text-muted);" data-km="រាល់ពេលទទួលបានប្រាក់ចំណូល ត្រូវដកយ៉ាងហោចណាស់ ១០% ទុកសន្សំជាដាច់ខាត មុនពេលយកទៅចំណាយ។" data-en="Every time you receive income, save at least 10% before spending on anything else.">រាល់ពេលទទួលបានប្រាក់ចំណូល ត្រូវដកយ៉ាងហោចណាស់ ១០% ទុកសន្សំជាដាច់ខាត មុនពេលយកទៅចំណាយ។</p>
-                                    <div class="mt-3 border rounded-lg px-3 py-2" style="background:var(--bg-input);border-color:var(--border-main);">
-                                        <p class="text-xs" style="color:var(--text-muted);">$500 × 10% = <span class="font-bold" style="color:var(--green);">$50/ខែ</span> = $600/ឆ្នាំ</p>
-                                    </div>
-                                </div>
+                    <div class="relative flex gap-4">
+                        <div class="relative z-10 shrink-0 mt-1">
+                            <div class="w-7 h-7 md:w-9 md:h-9 rounded-full flex items-center justify-center text-xs md:text-sm font-bold" style="border:2px solid var(--accent);background:var(--bg-body);color:var(--accent);">1</div>
+                        </div>
+                        <div class="border rounded-xl p-4 md:p-5 flex-1 min-w-0" style="background:var(--bg-card);border-color:var(--border-main);">
+                            <h3 class="font-bold mb-1" style="color:var(--text-heading);" data-km="ចាប់ផ្តើមបំប៉ោងផ្លូវរបស់អ្នក" data-en="Start Thy Purse to Fattening">ចាប់ផ្តើមបំប៉ោងផ្លូវរបស់អ្នក</h3>
+                            <p class="text-xs font-bold mb-2" style="color:var(--accent);" data-km="សន្សំ ១០% ភ្លាមៗ" data-en="Save 10% immediately">សន្សំ ១០% ភ្លាមៗ</p>
+                            <p class="text-sm leading-relaxed" style="color:var(--text-muted);" data-km="រាល់ពេលទទួលបានប្រាក់ចំណូល ត្រូវដកយ៉ាងហោចណាស់ ១០% ទុកសន្សំជាដាច់ខាត មុនពេលយកទៅចំណាយ។" data-en="Every time you receive income, save at least 10% before spending on anything else.">រាល់ពេលទទួលបានប្រាក់ចំណូល ត្រូវដកយ៉ាងហោចណាស់ ១០% ទុកសន្សំជាដាច់ខាត មុនពេលយកទៅចំណាយ។</p>
+                            <div class="mt-3 border rounded-lg px-3 py-2" style="background:var(--bg-input);border-color:var(--border-main);">
+                                <p class="text-xs" style="color:var(--text-muted);">$500 × 10% = <span class="font-bold" style="color:var(--green);">$50/ខែ</span> = $600/ឆ្នាំ</p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Cure 2 -->
-                    <div class="relative">
-                        <div class="timeline-dot"></div>
-                        <div class="border rounded-xl p-5 ml-2" style="background:var(--bg-card);border-color:var(--border-main);">
-                            <div class="flex items-start gap-3">
-                                <span class="text-2xl font-display font-black leading-none shrink-0" style="color:var(--accent);opacity:0.3;">02</span>
-                                <div>
-                                    <h3 class="font-bold mb-1" style="color:var(--text-heading);" data-km="គ្រប់គ្រងការចំណាយ" data-en="Control Thy Expenditures">គ្រប់គ្រងការចំណាយ</h3>
-                                    <p class="text-xs font-bold mb-2" style="color:var(--accent);" data-km="បែងចែកឲ្យច្បាស់រវាងតម្រូវការ និងបំណងប្រាថ្នា" data-en="Needs vs Wants">បែងចែកឲ្យច្បាស់រវាងតម្រូវការ និងបំណងប្រាថ្នា</p>
-                                    <p class="text-sm leading-relaxed" style="color:var(--text-muted);" data-km="កាត់បន្ថយការចំណាយមិនចាំបាច់ ដើម្បីកុំឲ្យការចំណាយកើនឡើងតាមទំហំចំណូល។" data-en="Cut unnecessary expenses so spending doesn't grow with income.">កាត់បន្ថយការចំណាយមិនចាំបាច់ ដើម្បីកុំឲ្យការចំណាយកើនឡើងតាមទំហំចំណូល។</p>
-                                    <div class="mt-3 border rounded-lg px-3 py-2" style="background:var(--bg-input);border-color:var(--border-main);">
-                                        <p class="text-xs" style="color:var(--text-muted);">$500 × 70% = <span class="font-bold" style="color:var(--accent);">$350/ខែ</span> សម្រាប់ចំណាយ</p>
-                                    </div>
-                                </div>
+                    <div class="relative flex gap-4">
+                        <div class="relative z-10 shrink-0 mt-1">
+                            <div class="w-7 h-7 md:w-9 md:h-9 rounded-full flex items-center justify-center text-xs md:text-sm font-bold" style="border:2px solid var(--accent);background:var(--bg-body);color:var(--accent);">2</div>
+                        </div>
+                        <div class="border rounded-xl p-4 md:p-5 flex-1 min-w-0" style="background:var(--bg-card);border-color:var(--border-main);">
+                            <h3 class="font-bold mb-1" style="color:var(--text-heading);" data-km="គ្រប់គ្រងការចំណាយ" data-en="Control Thy Expenditures">គ្រប់គ្រងការចំណាយ</h3>
+                            <p class="text-xs font-bold mb-2" style="color:var(--accent);" data-km="បែងចែកឲ្យច្បាស់រវាងតម្រូវការ និងបំណងប្រាថ្នា" data-en="Needs vs Wants">បែងចែកឲ្យច្បាស់រវាងតម្រូវការ និងបំណងប្រាថ្នា</p>
+                            <p class="text-sm leading-relaxed" style="color:var(--text-muted);" data-km="កាត់បន្ថយការចំណាយមិនចាំបាច់ ដើម្បីកុំឲ្យការចំណាយកើនឡើងតាមទំហំចំណូល។" data-en="Cut unnecessary expenses so spending doesn't grow with income.">កាត់បន្ថយការចំណាយមិនចាំបាច់ ដើម្បីកុំឲ្យការចំណាយកើនឡើងតាមទំហំចំណូល។</p>
+                            <div class="mt-3 border rounded-lg px-3 py-2" style="background:var(--bg-input);border-color:var(--border-main);">
+                                <p class="text-xs" style="color:var(--text-muted);">$500 × 70% = <span class="font-bold" style="color:var(--accent);">$350/ខែ</span> សម្រាប់ចំណាយ</p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Cure 3 -->
-                    <div class="relative">
-                        <div class="timeline-dot"></div>
-                        <div class="border rounded-xl p-5 ml-2" style="background:var(--bg-card);border-color:var(--border-main);">
-                            <div class="flex items-start gap-3">
-                                <span class="text-2xl font-display font-black leading-none shrink-0" style="color:var(--accent);opacity:0.3;">03</span>
-                                <div>
-                                    <h3 class="font-bold mb-1" style="color:var(--text-heading);" data-km="ធ្វើឱ្យមាសកើនឡើង" data-en="Make Thy Gold Multiply">ធ្វើឱ្យមាសកើនឡើង</h3>
-                                    <p class="text-xs font-bold mb-2" style="color:var(--accent);" data-km="វិនិយោគប្រាក់សន្សំ" data-en="Invest your savings">វិនិយោគប្រាក់សន្សំ</p>
-                                    <p class="text-sm leading-relaxed" style="color:var(--text-muted);" data-km="យកប្រាក់សន្សំទៅវិនិយោគលើអាជីវកម្ម ឬទ្រព្យសកម្មដែលបង្កើនការប្រាក់ត្រឡប់មកវិញ។" data-en="Invest your savings in businesses or assets that generate compound returns.">យកប្រាក់សន្សំទៅវិនិយោគលើអាជីវកម្ម ឬទ្រព្យសកម្មដែលបង្កើនការប្រាក់ត្រឡប់មកវិញ។</p>
-                                </div>
-                            </div>
+                    <div class="relative flex gap-4">
+                        <div class="relative z-10 shrink-0 mt-1">
+                            <div class="w-7 h-7 md:w-9 md:h-9 rounded-full flex items-center justify-center text-xs md:text-sm font-bold" style="border:2px solid var(--accent);background:var(--bg-body);color:var(--accent);">3</div>
+                        </div>
+                        <div class="border rounded-xl p-4 md:p-5 flex-1 min-w-0" style="background:var(--bg-card);border-color:var(--border-main);">
+                            <h3 class="font-bold mb-1" style="color:var(--text-heading);" data-km="ធ្វើឱ្យមាសកើនឡើង" data-en="Make Thy Gold Multiply">ធ្វើឱ្យមាសកើនឡើង</h3>
+                            <p class="text-xs font-bold mb-2" style="color:var(--accent);" data-km="វិនិយោគប្រាក់សន្សំ" data-en="Invest your savings">វិនិយោគប្រាក់សន្សំ</p>
+                            <p class="text-sm leading-relaxed" style="color:var(--text-muted);" data-km="យកប្រាក់សន្សំទៅវិនិយោគលើអាជីវកម្ម ឬទ្រព្យសកម្មដែលបង្កើនការប្រាក់ត្រឡប់មកវិញ។" data-en="Invest your savings in businesses or assets that generate compound returns.">យកប្រាក់សន្សំទៅវិនិយោគលើអាជីវកម្ម ឬទ្រព្យសកម្មដែលបង្កើនការប្រាក់ត្រឡប់មកវិញ។</p>
                         </div>
                     </div>
 
                     <!-- Cure 4 -->
-                    <div class="relative">
-                        <div class="timeline-dot"></div>
-                        <div class="border rounded-xl p-5 ml-2" style="background:var(--bg-card);border-color:var(--border-main);">
-                            <div class="flex items-start gap-3">
-                                <span class="text-2xl font-display font-black leading-none shrink-0" style="color:var(--accent);opacity:0.3;">04</span>
-                                <div>
-                                    <h3 class="font-bold mb-1" style="color:var(--text-heading);" data-km="ការពារទ្រព្យសម្បត្តិ" data-en="Guard Thy Treasures">ការពារទ្រព្យសម្បត្តិ</h3>
-                                    <p class="text-sm leading-relaxed" style="color:var(--text-muted);" data-km="ត្រូវប្រាកដថាប្រាក់ដើមមានសុវត្ថិភាព។ ចៀសវាងវិនិយោគលើអ្វីដែលអ្នកមិនយល់ច្បាស់។" data-en="Ensure your principal is safe. Avoid things you don't understand.">ត្រូវប្រាកដថាប្រាក់ដើមមានសុវត្ថិភាព។ ចៀសវាងវិនិយោគលើអ្វីដែលអ្នកមិនយល់ច្បាស់។</p>
-                                </div>
-                            </div>
+                    <div class="relative flex gap-4">
+                        <div class="relative z-10 shrink-0 mt-1">
+                            <div class="w-7 h-7 md:w-9 md:h-9 rounded-full flex items-center justify-center text-xs md:text-sm font-bold" style="border:2px solid var(--accent);background:var(--bg-body);color:var(--accent);">4</div>
+                        </div>
+                        <div class="border rounded-xl p-4 md:p-5 flex-1 min-w-0" style="background:var(--bg-card);border-color:var(--border-main);">
+                            <h3 class="font-bold mb-1" style="color:var(--text-heading);" data-km="ការពារទ្រព្យសម្បត្តិ" data-en="Guard Thy Treasures">ការពារទ្រព្យសម្បត្តិ</h3>
+                            <p class="text-sm leading-relaxed" style="color:var(--text-muted);" data-km="ត្រូវប្រាកដថាប្រាក់ដើមមានសុវត្ថិភាព។ ចៀសវាងវិនិយោគលើអ្វីដែលអ្នកមិនយល់ច្បាស់។" data-en="Ensure your principal is safe. Avoid things you don't understand.">ត្រូវប្រាកដថាប្រាក់ដើមមានសុវត្ថិភាព។ ចៀសវាងវិនិយោគលើអ្វីដែលអ្នកមិនយល់ច្បាស់។</p>
                         </div>
                     </div>
 
                     <!-- Cure 5 -->
-                    <div class="relative">
-                        <div class="timeline-dot"></div>
-                        <div class="border rounded-xl p-5 ml-2" style="background:var(--bg-card);border-color:var(--border-main);">
-                            <div class="flex items-start gap-3">
-                                <span class="text-2xl font-display font-black leading-none shrink-0" style="color:var(--accent);opacity:0.3;">05</span>
-                                <div>
-                                    <h3 class="font-bold mb-1" style="color:var(--text-heading);" data-km="ធ្វើឱ្យលំនៅដ្ឋានមានប្រាក់ចំណេញ" data-en="Make Thy Dwelling Profitable">ធ្វើឱ្យលំនៅដ្ឋានមានប្រាក់ចំណេញ</h3>
-                                    <p class="text-sm leading-relaxed" style="color:var(--text-muted);" data-km="ការមានផ្ទះផ្ទាល់ជួយកាត់បន្ថយថ្លៃជួល និងផ្តល់សុវត្ថិភាពសម្រាប់គ្រួសារ។" data-en="Own your home to reduce rent and secure your family.">ការមានផ្ទះផ្ទាល់ជួយកាត់បន្ថយថ្លៃជួល និងផ្តល់សុវត្ថិភាពសម្រាប់គ្រួសារ។</p>
-                                </div>
-                            </div>
+                    <div class="relative flex gap-4">
+                        <div class="relative z-10 shrink-0 mt-1">
+                            <div class="w-7 h-7 md:w-9 md:h-9 rounded-full flex items-center justify-center text-xs md:text-sm font-bold" style="border:2px solid var(--accent);background:var(--bg-body);color:var(--accent);">5</div>
+                        </div>
+                        <div class="border rounded-xl p-4 md:p-5 flex-1 min-w-0" style="background:var(--bg-card);border-color:var(--border-main);">
+                            <h3 class="font-bold mb-1" style="color:var(--text-heading);" data-km="ធ្វើឱ្យលំនៅដ្ឋានមានប្រាក់ចំណេញ" data-en="Make Thy Dwelling Profitable">ធ្វើឱ្យលំនៅដ្ឋានមានប្រាក់ចំណេញ</h3>
+                            <p class="text-sm leading-relaxed" style="color:var(--text-muted);" data-km="ការមានផ្ទះផ្ទាល់ជួយកាត់បន្ថយថ្លៃជួល និងផ្តល់សុវត្ថិភាពសម្រាប់គ្រួសារ។" data-en="Own your home to reduce rent and secure your family.">ការមានផ្ទះផ្ទាល់ជួយកាត់បន្ថយថ្លៃជួល និងផ្តល់សុវត្ថិភាពសម្រាប់គ្រួសារ។</p>
                         </div>
                     </div>
 
                     <!-- Cure 6 -->
-                    <div class="relative">
-                        <div class="timeline-dot"></div>
-                        <div class="border rounded-xl p-5 ml-2" style="background:var(--bg-card);border-color:var(--border-main);">
-                            <div class="flex items-start gap-3">
-                                <span class="text-2xl font-display font-black leading-none shrink-0" style="color:var(--accent);opacity:0.3;">06</span>
-                                <div>
-                                    <h3 class="font-bold mb-1" style="color:var(--text-heading);" data-km="ធានាចំណូលនាពេលអនាគត" data-en="Insure a Future Income">ធានាចំណូលនាពេលអនាគត</h3>
-                                    <p class="text-sm leading-relaxed" style="color:var(--text-muted);" data-km="រៀបចំផែនការហិរញ្ញវត្ថុសម្រាប់ចូលនិវត្តន៍ និងការពារគ្រួសារ។" data-en="Plan for retirement and protect your family.">រៀបចំផែនការហិរញ្ញវត្ថុសម្រាប់ចូលនិវត្តន៍ និងការពារគ្រួសារ។</p>
-                                </div>
-                            </div>
+                    <div class="relative flex gap-4">
+                        <div class="relative z-10 shrink-0 mt-1">
+                            <div class="w-7 h-7 md:w-9 md:h-9 rounded-full flex items-center justify-center text-xs md:text-sm font-bold" style="border:2px solid var(--accent);background:var(--bg-body);color:var(--accent);">6</div>
+                        </div>
+                        <div class="border rounded-xl p-4 md:p-5 flex-1 min-w-0" style="background:var(--bg-card);border-color:var(--border-main);">
+                            <h3 class="font-bold mb-1" style="color:var(--text-heading);" data-km="ធានាចំណូលនាពេលអនាគត" data-en="Insure a Future Income">ធានាចំណូលនាពេលអនាគត</h3>
+                            <p class="text-sm leading-relaxed" style="color:var(--text-muted);" data-km="រៀបចំផែនការហិរញ្ញវត្ថុសម្រាប់ចូលនិវត្តន៍ និងការពារគ្រួសារ។" data-en="Plan for retirement and protect your family.">រៀបចំផែនការហិរញ្ញវត្ថុសម្រាប់ចូលនិវត្តន៍ និងការពារគ្រួសារ។</p>
                         </div>
                     </div>
 
                     <!-- Cure 7 -->
-                    <div class="relative">
-                        <div class="timeline-dot"></div>
-                        <div class="border rounded-xl p-5 ml-2" style="background:var(--bg-card);border-color:var(--border-main);">
-                            <div class="flex items-start gap-3">
-                                <span class="text-2xl font-display font-black leading-none shrink-0" style="color:var(--accent);opacity:0.3;">07</span>
-                                <div>
-                                    <h3 class="font-bold mb-1" style="color:var(--text-heading);" data-km="បង្កើនសមត្ថភាពរកប្រាក់" data-en="Increase Thy Ability to Earn">បង្កើនសមត្ថភាពរកប្រាក់</h3>
-                                    <p class="text-sm leading-relaxed" style="color:var(--text-muted);" data-km="វិនិយោគលើចំណេះដឹង និងជំនាញ ដើម្បីបង្កើនសមត្ថភាពរកប្រាក់។" data-en="Invest in knowledge and skills to increase earning power.">វិនិយោគលើចំណេះដឹង និងជំនាញ ដើម្បីបង្កើនសមត្ថភាពរកប្រាក់។</p>
-                                </div>
-                            </div>
+                    <div class="relative flex gap-4">
+                        <div class="relative z-10 shrink-0 mt-1">
+                            <div class="w-7 h-7 md:w-9 md:h-9 rounded-full flex items-center justify-center text-xs md:text-sm font-bold" style="border:2px solid var(--accent);background:var(--bg-body);color:var(--accent);">7</div>
+                        </div>
+                        <div class="border rounded-xl p-4 md:p-5 flex-1 min-w-0" style="background:var(--bg-card);border-color:var(--border-main);">
+                            <h3 class="font-bold mb-1" style="color:var(--text-heading);" data-km="បង្កើនសមត្ថភាពរកប្រាក់" data-en="Increase Thy Ability to Earn">បង្កើនសមត្ថភាពរកប្រាក់</h3>
+                            <p class="text-sm leading-relaxed" style="color:var(--text-muted);" data-km="វិនិយោគលើចំណេះដឹង និងជំនាញ ដើម្បីបង្កើនសមត្ថភាពរកប្រាក់។" data-en="Invest in knowledge and skills to increase earning power.">វិនិយោគលើចំណេះដឹង និងជំនាញ ដើម្បីបង្កើនសមត្ថភាពរកប្រាក់។</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="flex justify-end mt-8">
-                    <button onclick="app.go('laws')" class="text-sm font-bold transition" style="color:var(--accent);" data-km="បន្ត៖ ច្បាប់មាស &#8594;" data-en="Next: Laws of Gold &#8594;">បន្ត៖ ច្បាប់មាស &#8594;</button>
+                    <button onclick="app.go('laws')" class="text-sm font-bold transition hover:opacity-70" style="color:var(--accent);" data-km="បន្ត៖ ច្បាប់មាស &#8594;" data-en="Next: Laws of Gold &#8594;">បន្ត៖ ច្បាប់មាស &#8594;</button>
                 </div>
             </section>
 
@@ -310,65 +293,70 @@
                     <h2 class="text-2xl md:text-3xl font-display font-black" style="color:var(--text-heading);" data-km="ច្បាប់នៃមាស ៥យ៉ាង" data-en="5 Laws of Gold">ច្បាប់នៃមាស ៥យ៉ាង</h2>
                 </div>
 
-                <div class="space-y-3">
-                    <div class="border rounded-xl overflow-hidden" style="background:var(--bg-card);border-color:var(--border-main);">
-                        <div onclick="this.classList.toggle('open')" class="law-toggle flex items-center justify-between px-5 py-4">
+                <div class="space-y-3" id="laws-accordion">
+                    <!-- Law 1 -->
+                    <div class="border rounded-xl overflow-hidden transition-colors" style="background:var(--bg-card);border-color:var(--border-main);">
+                        <button onclick="app.toggleLaw(this)" class="law-toggle w-full flex items-center justify-between px-5 py-4 text-left cursor-pointer" aria-expanded="false">
                             <div class="flex items-center gap-3">
                                 <span class="w-8 h-8 rounded-lg flex items-center justify-center font-display font-black text-sm shrink-0" style="background:var(--accent-light);color:var(--accent);">១</span>
                                 <span class="font-bold text-sm" style="color:var(--text-heading);" data-km="មាសមករកអ្នកសន្សំ" data-en="Gold comes to the saver">មាសមករកអ្នកសន្សំ</span>
                             </div>
-                            <span class="law-arrow text-xs transition-transform duration-300" style="color:var(--text-label);">&#9662;</span>
-                        </div>
-                        <div class="law-content px-5 pb-4 text-sm leading-relaxed" style="color:var(--text-muted);" data-km="អ្នកដែលសន្សំ ១០% នៃចំណូល នឹងឃើញមាសកើនឡើងរៀងរាល់ខែ។ សន្សំជាទម្លាប់ដែលត្រូវរក្សាជារៀងរាល់ខែ។" data-en="Those who save 10% will see gold grow every month. It's a habit to maintain.">អ្នកដែលសន្សំ ១០% នៃចំណូល នឹងឃើញមាសកើនឡើងរៀងរាល់ខែ។ សន្សំជាទម្លាប់ដែលត្រូវរក្សាជារៀងរាល់ខែ។</div>
+                            <svg class="law-arrow w-4 h-4 shrink-0 transition-transform duration-300" style="color:var(--text-label);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div class="law-content px-5 pb-5 text-sm leading-relaxed hidden" style="color:var(--text-muted);" data-km="អ្នកដែលសន្សំ ១០% នៃចំណូល នឹងឃើញមាសកើនឡើងរៀងរាល់ខែ។ សន្សំជាទម្លាប់ដែលត្រូវរក្សាជារៀងរាល់ខែ។" data-en="Those who save 10% will see gold grow every month. It's a habit to maintain.">អ្នកដែលសន្សំ ១០% នៃចំណូល នឹងឃើញមាសកើនឡើងរៀងរាល់ខែ។ សន្សំជាទម្លាប់ដែលត្រូវរក្សាជារៀងរាល់ខែ។</div>
                     </div>
 
-                    <div class="border rounded-xl overflow-hidden" style="background:var(--bg-card);border-color:var(--border-main);">
-                        <div onclick="this.classList.toggle('open')" class="law-toggle flex items-center justify-between px-5 py-4">
+                    <!-- Law 2 -->
+                    <div class="border rounded-xl overflow-hidden transition-colors" style="background:var(--bg-card);border-color:var(--border-main);">
+                        <button onclick="app.toggleLaw(this)" class="law-toggle w-full flex items-center justify-between px-5 py-4 text-left cursor-pointer" aria-expanded="false">
                             <div class="flex items-center gap-3">
                                 <span class="w-8 h-8 rounded-lg flex items-center justify-center font-display font-black text-sm shrink-0" style="background:var(--accent-light);color:var(--accent);">២</span>
                                 <span class="font-bold text-sm" style="color:var(--text-heading);" data-km="មាសធ្វើការសម្រាប់ម្ចាស់ប្រាជ្ញា" data-en="Gold works for the wise">មាសធ្វើការសម្រាប់ម្ចាស់ប្រាជ្ញា</span>
                             </div>
-                            <span class="law-arrow text-xs transition-transform duration-300" style="color:var(--text-label);">&#9662;</span>
-                        </div>
-                        <div class="law-content px-5 pb-4 text-sm leading-relaxed" style="color:var(--text-muted);" data-km="មាសដែលយើងវិនិយោគនឹងធ្វើការដើម្បីបង្កើនផលចំណេញ។ ត្រូវរកទីកន្លែងដែលមាសអាចធ្វើការបាន។" data-en="Gold invested will work to generate returns. Find where gold can work.">មាសដែលយើងវិនិយោគនឹងធ្វើការដើម្បីបង្កើនផលចំណេញ។ ត្រូវរកទីកន្លែងដែលមាសអាចធ្វើការបាន។</div>
+                            <svg class="law-arrow w-4 h-4 shrink-0 transition-transform duration-300" style="color:var(--text-label);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div class="law-content px-5 pb-5 text-sm leading-relaxed hidden" style="color:var(--text-muted);" data-km="មាសដែលយើងវិនិយោគនឹងធ្វើការដើម្បីបង្កើនផលចំណេញ។ ត្រូវរកទីកន្លែងដែលមាសអាចធ្វើការបាន។" data-en="Gold invested will work to generate returns. Find where gold can work.">មាសដែលយើងវិនិយោគនឹងធ្វើការដើម្បីបង្កើនផលចំណេញ។ ត្រូវរកទីកន្លែងដែលមាសអាចធ្វើការបាន។</div>
                     </div>
 
-                    <div class="border rounded-xl overflow-hidden" style="background:var(--bg-card);border-color:var(--border-main);">
-                        <div onclick="this.classList.toggle('open')" class="law-toggle flex items-center justify-between px-5 py-4">
+                    <!-- Law 3 -->
+                    <div class="border rounded-xl overflow-hidden transition-colors" style="background:var(--bg-card);border-color:var(--border-main);">
+                        <button onclick="app.toggleLaw(this)" class="law-toggle w-full flex items-center justify-between px-5 py-4 text-left cursor-pointer" aria-expanded="false">
                             <div class="flex items-center gap-3">
                                 <span class="w-8 h-8 rounded-lg flex items-center justify-center font-display font-black text-sm shrink-0" style="background:var(--accent-light);color:var(--accent);">៣</span>
                                 <span class="font-bold text-sm" style="color:var(--text-heading);" data-km="មាសស្ថិតនៅជាមួយប្រាជ្ញា" data-en="Gold clings to wisdom">មាសស្ថិតនៅជាមួយប្រាជ្ញា</span>
                             </div>
-                            <span class="law-arrow text-xs transition-transform duration-300" style="color:var(--text-label);">&#9662;</span>
-                        </div>
-                        <div class="law-content px-5 pb-4 text-sm leading-relaxed" style="color:var(--text-muted);" data-km="មាសស្ថិតនៅជាមួយអ្នកដែលមានប្រាជ្ញា។ រក្សាទុកមាសនៅជាមួយអ្នកដែលទុកចិត្ត។" data-en="Gold stays with the wise. Keep it with those you trust.">មាសស្ថិតនៅជាមួយអ្នកដែលមានប្រាជ្ញា។ រក្សាទុកមាសនៅជាមួយអ្នកដែលទុកចិត្ត។</div>
+                            <svg class="law-arrow w-4 h-4 shrink-0 transition-transform duration-300" style="color:var(--text-label);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div class="law-content px-5 pb-5 text-sm leading-relaxed hidden" style="color:var(--text-muted);" data-km="មាសស្ថិតនៅជាមួយអ្នកដែលមានប្រាជ្ញា។ រក្សាទុកមាសនៅជាមួយអ្នកដែលទុកចិត្ត។" data-en="Gold stays with the wise. Keep it with those you trust.">មាសស្ថិតនៅជាមួយអ្នកដែលមានប្រាជ្ញា។ រក្សាទុកមាសនៅជាមួយអ្នកដែលទុកចិត្ត។</div>
                     </div>
 
-                    <div class="border rounded-xl overflow-hidden" style="background:var(--bg-card);border-color:var(--border-main);">
-                        <div onclick="this.classList.toggle('open')" class="law-toggle flex items-center justify-between px-5 py-4">
+                    <!-- Law 4 -->
+                    <div class="border rounded-xl overflow-hidden transition-colors" style="background:var(--bg-card);border-color:var(--border-main);">
+                        <button onclick="app.toggleLaw(this)" class="law-toggle w-full flex items-center justify-between px-5 py-4 text-left cursor-pointer" aria-expanded="false">
                             <div class="flex items-center gap-3">
                                 <span class="w-8 h-8 rounded-lg flex items-center justify-center font-display font-black text-sm shrink-0" style="background:rgba(220,38,38,0.08);color:var(--red);">៤</span>
                                 <span class="font-bold text-sm" style="color:var(--text-heading);" data-km="មាសរត់ចេញពីល្ពៅ" data-en="Gold flees from fools">មាសរត់ចេញពីល្ពៅ</span>
                             </div>
-                            <span class="law-arrow text-xs transition-transform duration-300" style="color:var(--text-label);">&#9662;</span>
-                        </div>
-                        <div class="law-content px-5 pb-4 text-sm leading-relaxed" style="color:var(--text-muted);" data-km="មាសរត់ចេញពីអ្នកដែលស្តាប់គំនិតល្ពៅ ឬវិនិយោគដោយមិនគិត។" data-en="Gold flees from fools or those who invest without thinking.">មាសរត់ចេញពីអ្នកដែលស្តាប់គំនិតល្ពៅ ឬវិនិយោគដោយមិនគិត។</div>
+                            <svg class="law-arrow w-4 h-4 shrink-0 transition-transform duration-300" style="color:var(--text-label);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div class="law-content px-5 pb-5 text-sm leading-relaxed hidden" style="color:var(--text-muted);" data-km="មាសរត់ចេញពីអ្នកដែលស្តាប់គំនិតល្ពៅ ឬវិនិយោគដោយមិនគិត។" data-en="Gold flees from fools or those who invest without thinking.">មាសរត់ចេញពីអ្នកដែលស្តាប់គំនិតល្ពៅ ឬវិនិយោគដោយមិនគិត។</div>
                     </div>
 
-                    <div class="border rounded-xl overflow-hidden" style="background:var(--bg-card);border-color:var(--border-main);">
-                        <div onclick="this.classList.toggle('open')" class="law-toggle flex items-center justify-between px-5 py-4">
+                    <!-- Law 5 -->
+                    <div class="border rounded-xl overflow-hidden transition-colors" style="background:var(--bg-card);border-color:var(--border-main);">
+                        <button onclick="app.toggleLaw(this)" class="law-toggle w-full flex items-center justify-between px-5 py-4 text-left cursor-pointer" aria-expanded="false">
                             <div class="flex items-center gap-3">
                                 <span class="w-8 h-8 rounded-lg flex items-center justify-center font-display font-black text-sm shrink-0" style="background:rgba(220,38,38,0.08);color:var(--red);">៥</span>
                                 <span class="font-bold text-sm" style="color:var(--text-heading);" data-km="មាសភ័យខ្លាចអ្នកបង្ខំ" data-en="Gold fears force">មាសភ័យខ្លាចអ្នកបង្ខំ</span>
                             </div>
-                            <span class="law-arrow text-xs transition-transform duration-300" style="color:var(--text-label);">&#9662;</span>
-                        </div>
-                        <div class="law-content px-5 pb-4 text-sm leading-relaxed" style="color:var(--text-muted);" data-km="អ្នកដែលព្យាយាមរកប្រាក់លឿនពេក នឹងបាត់បង់មាស។ ត្រូវអត់ធ្មត់។" data-en="Those who force money will lose it. Be patient.">អ្នកដែលព្យាយាមរកប្រាក់លឿនពេក នឹងបាត់បង់មាស។ ត្រូវអត់ធ្មត់។</div>
+                            <svg class="law-arrow w-4 h-4 shrink-0 transition-transform duration-300" style="color:var(--text-label);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div class="law-content px-5 pb-5 text-sm leading-relaxed hidden" style="color:var(--text-muted);" data-km="អ្នកដែលព្យាយាមរកប្រាក់លឿនពេក នឹងបាត់បង់មាស។ ត្រូវអត់ធ្មត់។" data-en="Those who force money will lose it. Be patient.">អ្នកដែលព្យាយាមរកប្រាក់លឿនពេក នឹងបាត់បង់មាស។ ត្រូវអត់ធ្មត់។</div>
                     </div>
                 </div>
 
                 <div class="flex justify-end mt-8">
-                    <button onclick="app.go('calc')" class="text-sm font-bold transition" style="color:var(--accent);" data-km="បន្ត៖ គណនាថវិកា &#8594;" data-en="Next: Budget Calculator &#8594;">បន្ត៖ គណនាថវិកា &#8594;</button>
+                    <button onclick="app.go('calc')" class="text-sm font-bold transition hover:opacity-70" style="color:var(--accent);" data-km="បន្ត៖ គណនាថវិកា &#8594;" data-en="Next: Budget Calculator &#8594;">បន្ត៖ គណនាថវិកា &#8594;</button>
                 </div>
             </section>
 
@@ -681,6 +669,18 @@
                 document.getElementById('langBtnMobile').textContent = l === 'km' ? 'EN' : 'KM';
                 document.querySelectorAll('[data-km]').forEach(function(el) { el.textContent = el.getAttribute('data-' + l); });
                 document.documentElement.lang = l;
+            },
+
+            toggleLaw: function(btn) {
+                var content = btn.nextElementSibling;
+                var isOpen = content.classList.contains('open');
+                // close all
+                document.querySelectorAll('.law-content.open').forEach(function(el) { el.classList.remove('open'); });
+                document.querySelectorAll('.law-toggle[aria-expanded="true"]').forEach(function(el) { el.setAttribute('aria-expanded', 'false'); });
+                if (!isOpen) {
+                    content.classList.add('open');
+                    btn.setAttribute('aria-expanded', 'true');
+                }
             },
 
             calcBudget: function() {
