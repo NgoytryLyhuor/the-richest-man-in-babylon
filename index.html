@@ -18,6 +18,7 @@
 
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: {
@@ -44,6 +45,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
         .prose-kh { line-height: 1.8; color: #374151; }
+        .dark .prose-kh { color: #d1d5db; }
         .prose-kh h3 {
             color: #1e3a8a;
             font-family: "Battambang", serif;
@@ -52,6 +54,7 @@
             margin-bottom: 0.5rem;
             font-size: 1.25rem;
         }
+        .dark .prose-kh h3 { color: #93c5fd; }
         .prose-kh p { margin-bottom: 1rem; }
         .chart-wrapper { position: relative; height: 300px; width: 100%; }
         @media (min-width: 768px) { .chart-wrapper { height: 400px; } }
@@ -59,39 +62,47 @@
         input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
         input[type="number"] { -moz-appearance: textfield; }
         .tab-active { border-bottom: 3px solid #d97706; color: #d97706; font-weight: 700; }
+        .theme-transition,
+        .theme-transition *,
+        .theme-transition *::before,
+        .theme-transition *::after {
+            transition: background-color 0.3s ease, color 0.2s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
+        }
     </style>
 </head>
-<body class="bg-bgLight text-gray-800 font-sans min-h-screen flex flex-col">
+<body class="bg-bgLight dark:bg-gray-900 text-gray-800 dark:text-gray-200 font-sans min-h-screen flex flex-col transition-colors duration-300">
 
     <!-- NAVIGATION -->
-    <nav class="bg-white shadow-md sticky top-0 z-50">
+    <nav class="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between h-16">
                 <div class="flex items-center cursor-pointer" onclick="app.nav('intro')">
-                    <span class="text-xl md:text-2xl font-header font-bold text-gold">មនុស្សដែលមានបំផុត</span>
+                    <span class="text-xl md:text-2xl font-header font-bold text-gold dark:text-yellow-400">មនុស្សដែលមានបំផុត</span>
                 </div>
                 <div class="hidden md:flex space-x-4 items-center">
-                    <button onclick="app.nav('cures')" class="nav-item hover:text-gold font-medium transition text-sm">៧. វិធីព្យាបាល</button>
-                    <button onclick="app.nav('laws')" class="nav-item hover:text-gold font-medium transition text-sm">៥. ច្បាប់មាស</button>
-                    <button onclick="app.nav('calculator')" class="nav-item hover:text-gold font-medium transition text-sm">គណនា</button>
-                    <button onclick="app.nav('savings')" class="nav-item hover:text-gold font-medium transition text-sm">ការលូតលាស់</button>
-                    <button onclick="app.nav('expenses')" class="nav-item hover:text-gold font-medium transition text-sm">ចំណាយ</button>
+                    <button onclick="app.nav('cures')" class="nav-item hover:text-gold dark:text-gray-300 font-medium transition text-sm">៧. វិធីព្យាបាល</button>
+                    <button onclick="app.nav('laws')" class="nav-item hover:text-gold dark:text-gray-300 font-medium transition text-sm">៥. ច្បាប់មាស</button>
+                    <button onclick="app.nav('calculator')" class="nav-item hover:text-gold dark:text-gray-300 font-medium transition text-sm">គណនា</button>
+                    <button onclick="app.nav('savings')" class="nav-item hover:text-gold dark:text-gray-300 font-medium transition text-sm">ការលូតលាស់</button>
+                    <button onclick="app.nav('expenses')" class="nav-item hover:text-gold dark:text-gray-300 font-medium transition text-sm">ចំណាយ</button>
                     <button onclick="app.toggleLang()" class="bg-gold text-white px-3 py-1 rounded-full text-sm font-bold hover:bg-yellow-600 transition" id="langBtn">EN</button>
+                    <button onclick="app.toggleTheme()" id="themeBtn" class="w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors text-lg" title="Toggle theme">🌙</button>
                 </div>
                 <div class="md:hidden flex items-center space-x-2">
                     <button onclick="app.toggleLang()" class="bg-gold text-white px-2 py-1 rounded text-xs font-bold" id="langBtnMobile">EN</button>
-                    <button onclick="app.toggleMobileMenu()" class="text-gray-600 hover:text-gold focus:outline-none p-2 border rounded">
+                    <button onclick="app.toggleTheme()" id="themeBtnMobile" class="w-8 h-8 flex items-center justify-center rounded bg-gray-100 dark:bg-gray-700 text-sm transition-colors">🌙</button>
+                    <button onclick="app.toggleMobileMenu()" class="text-gray-600 dark:text-gray-300 hover:text-gold focus:outline-none p-2 border dark:border-gray-600 rounded">
                         <span class="text-xl font-bold">☰</span>
                     </button>
                 </div>
             </div>
         </div>
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t absolute w-full shadow-lg z-50">
-            <button onclick="app.nav('cures')" class="block w-full text-left px-4 py-3 border-b hover:bg-gray-50">៧. វិធីព្យាបាល</button>
-            <button onclick="app.nav('laws')" class="block w-full text-left px-4 py-3 border-b hover:bg-gray-50">៥. ច្បាប់មាស</button>
-            <button onclick="app.nav('calculator')" class="block w-full text-left px-4 py-3 border-b hover:bg-gray-50">គណនា</button>
-            <button onclick="app.nav('savings')" class="block w-full text-left px-4 py-3 border-b hover:bg-gray-50">ការលូតលាស់</button>
-            <button onclick="app.nav('expenses')" class="block w-full text-left px-4 py-3 hover:bg-gray-50">ចំណាយ</button>
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-800 border-t dark:border-gray-700 absolute w-full shadow-lg z-50 transition-colors duration-300">
+            <button onclick="app.nav('cures')" class="block w-full text-left px-4 py-3 border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-gray-300">៧. វិធីព្យាបាល</button>
+            <button onclick="app.nav('laws')" class="block w-full text-left px-4 py-3 border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-gray-300">៥. ច្បាប់មាស</button>
+            <button onclick="app.nav('calculator')" class="block w-full text-left px-4 py-3 border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-gray-300">គណនា</button>
+            <button onclick="app.nav('savings')" class="block w-full text-left px-4 py-3 border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-gray-300">ការលូតលាស់</button>
+            <button onclick="app.nav('expenses')" class="block w-full text-left px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-gray-300">ចំណាយ</button>
         </div>
     </nav>
 
@@ -101,34 +112,34 @@
         <!-- 0. INTRO / DASHBOARD -->
         <div id="page-intro" class="fade-in">
             <div class="text-center mb-10">
-                <h1 class="text-3xl md:text-5xl font-header font-bold text-primary mb-4 leading-tight" data-km="មនុស្សដែលមានបំផុតក្នុងបាប៊ីឡូន" data-en="The Richest Man in Babylon">មនុស្សដែលមានបំផុតក្នុងបាប៊ីឡូន</h1>
-                <p class="text-lg text-gray-600 max-w-3xl mx-auto" data-km="សៀវភៅហិរញ្ញវត្ថុបុរាណដោយ George S. Clason ផ្តល់មេរៀនសាមញ្ញៗប៉ុន្តែមានប្រសិទ្ធភាពខ្ពស់ក្នុងការគ្រប់គ្រង និងបង្កើនទ្រព្យសម្បត្តិ។" data-en="A classic financial book by George S. Clason offering simple yet powerful lessons in managing and building wealth.">សៀវភៅហិរញ្ញវត្ថុបុរាណដោយ George S. Clason ផ្តល់មេរៀនសាមញ្ញៗប៉ុន្តែមានប្រសិទ្ធភាពខ្ពស់ក្នុងការគ្រប់គ្រង និងបង្កើនទ្រព្យសម្បត្តិ។</p>
+                <h1 class="text-3xl md:text-5xl font-header font-bold text-primary dark:text-blue-400 mb-4 leading-tight" data-km="មនុស្សដែលមានបំផុតក្នុងបាប៊ីឡូន" data-en="The Richest Man in Babylon">មនុស្សដែលមានបំផុតក្នុងបាប៊ីឡូន</h1>
+                <p class="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto" data-km="សៀវភៅហិរញ្ញវត្ថុបុរាណដោយ George S. Clason ផ្តល់មេរៀនសាមញ្ញៗប៉ុន្តែមានប្រសិទ្ធភាពខ្ពស់ក្នុងការគ្រប់គ្រង និងបង្កើនទ្រព្យសម្បត្តិ។" data-en="A classic financial book by George S. Clason offering simple yet powerful lessons in managing and building wealth.">សៀវភៅហិរញ្ញវត្ថុបុរាណដោយ George S. Clason ផ្តល់មេរៀនសាមញ្ញៗប៉ុន្តែមានប្រសិទ្ធភាពខ្ពស់ក្នុងការគ្រប់គ្រង និងបង្កើនទ្រព្យសម្បត្តិ។</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-                <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-gold">
-                    <h3 class="text-sm font-bold text-gray-500 uppercase" data-km="វិធីព្យាបាល" data-en="Cures">វិធីព្យាបាល</h3>
-                    <p class="text-3xl font-header font-bold text-gold mt-2">7</p>
-                    <p class="text-sm text-gray-600 mt-1" data-km="វិធីព្យាបាលផ្លូវចិត្ត" data-en="Cures for a lean purse">វិធីព្យាបាលផ្លូវចិត្ត</p>
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/50 transition-colors duration-300 border-l-4 border-gold">
+                    <h3 class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase" data-km="វិធីព្យាបាល" data-en="Cures">វិធីព្យាបាល</h3>
+                    <p class="text-3xl font-header font-bold text-gold dark:text-yellow-400 mt-2">7</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-300 mt-1" data-km="វិធីព្យាបាលផ្លូវចិត្ត" data-en="Cures for a lean purse">វិធីព្យាបាលផ្លូវចិត្ត</p>
                 </div>
-                <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-primary">
-                    <h3 class="text-sm font-bold text-gray-500 uppercase" data-km="ច្បាប់មាស" data-en="Laws of Gold">ច្បាប់មាស</h3>
-                    <p class="text-3xl font-header font-bold text-primary mt-2">5</p>
-                    <p class="text-sm text-gray-600 mt-1" data-km="ច្បាប់នៃមាស" data-en="Laws of Gold">ច្បាប់នៃមាស</p>
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/50 transition-colors duration-300 border-l-4 border-primary">
+                    <h3 class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase" data-km="ច្បាប់មាស" data-en="Laws of Gold">ច្បាប់មាស</h3>
+                    <p class="text-3xl font-header font-bold text-primary dark:text-blue-400 mt-2">5</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-300 mt-1" data-km="ច្បាប់នៃមាស" data-en="Laws of Gold">ច្បាប់នៃមាស</p>
                 </div>
-                <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-success">
-                    <h3 class="text-sm font-bold text-gray-500 uppercase" data-km="រូបមន្ត" data-en="Formula">រូបមន្ត</h3>
-                    <p class="text-3xl font-header font-bold text-success mt-2">10/20/70</p>
-                    <p class="text-sm text-gray-600 mt-1" data-km="បែងចែកថវិកា" data-en="Budget split">បែងចែកថវិកា</p>
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/50 transition-colors duration-300 border-l-4 border-success">
+                    <h3 class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase" data-km="រូបមន្ត" data-en="Formula">រូបមន្ត</h3>
+                    <p class="text-3xl font-header font-bold text-success dark:text-green-400 mt-2">10/20/70</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-300 mt-1" data-km="បែងចែកថវិកា" data-en="Budget split">បែងចែកថវិកា</p>
                 </div>
             </div>
 
-            <div class="bg-white p-6 rounded-xl shadow-sm mb-8">
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/50 transition-colors duration-300 mb-8">
                 <h2 class="text-xl font-header font-bold mb-4 text-center" data-km="ការលូតលាស់នៃប្រាក់សន្សំក្នុង ១ ឆ្នាំ" data-en="Savings Growth Over 1 Year">ការលូតលាស់នៃប្រាក់សន្សំក្នុង ១ ឆ្នាំ</h2>
                 <div class="chart-wrapper">
                     <canvas id="mainChart"></canvas>
                 </div>
-                <p class="text-center text-sm text-gray-500 mt-4 italic" data-km="ប្រាក់សន្សំ $39.28/ខែ អត្រាការប្រាក់ ៣% ក្នុង ១ ឆ្នាំ" data-en="$39.28/month savings at 3% interest for 1 year">ប្រាក់សន្សំ $39.28/ខែ អត្រាការប្រាក់ ៣% ក្នុង ១ ឆ្នាំ</p>
+                <p class="text-center text-sm text-gray-500 dark:text-gray-400 mt-4 italic" data-km="ប្រាក់សន្សំ $39.28/ខែ អត្រាការប្រាក់ ៣% ក្នុង ១ ឆ្នាំ" data-en="$39.28/month savings at 3% interest for 1 year">ប្រាក់សន្សំ $39.28/ខែ អត្រាការប្រាក់ ៣% ក្នុង ១ ឆ្នាំ</p>
             </div>
 
             <div class="text-center">
@@ -138,169 +149,169 @@
 
         <!-- 1. 7 CURES FOR A LEAN PURSE -->
         <div id="page-cures" class="hidden fade-in">
-            <h2 class="text-3xl font-header font-bold text-gold mb-6 border-b-2 border-gold pb-2" data-km="៧. វិធីព្យាបាលផ្លូវចិត្ត (៧ Cures for a Lean Purse)" data-en="7. Cures for a Lean Purse">៧. វិធីព្យាបាលផ្លូវចិត្ត (៧ Cures for a Lean Purse)</h2>
+            <h2 class="text-3xl font-header font-bold text-gold dark:text-yellow-400 mb-6 border-b-2 border-gold pb-2" data-km="៧. វិធីព្យាបាលផ្លូវចិត្ត (៧ Cures for a Lean Purse)" data-en="7. Cures for a Lean Purse">៧. វិធីព្យាបាលផ្លូវចិត្ត (៧ Cures for a Lean Purse)</h2>
 
             <!-- Cure 1 -->
-            <div class="bg-white p-6 rounded-xl shadow-sm mb-6">
-                <h3 class="text-xl font-header font-bold text-primary mb-2">១. <span data-km="ចាប់ផ្តើមបំប៉ោងផ្លូវរបស់អ្នក" data-en="Start Thy Purse to Fattening">ចាប់ផ្តើមបំប៉ោងផ្លូវរបស់អ្នក</span></h3>
-                <p class="text-sm text-gold font-bold mb-2" data-km="ដាក់មាស ១០% ទុកសន្សំភ្លាមៗ" data-en="Save 10% of everything you earn">ដាក់មាស ១០% ទុកសន្សំភ្លាមៗ</p>
-                <p class="text-gray-600 text-sm mb-4" data-km="រាល់ពេលទទួលបានប្រាក់ចំណូល ត្រូវដកយ៉ាងហោចណាស់ ១០% ទុកសន្សំជាដាច់ខាត មុនពេលយកទៅចំណាយលើប្រាក់ផ្សេងៗ។ ប្រាក់នេះជាមូលដ្ឋានគ្រឹះនៃទ្រព្យសម្បត្តិរបស់អ្នក។" data-en="Every time you receive income, save at least 10% before spending on anything else. This money is the foundation of your wealth.">រាល់ពេលទទួលបានប្រាក់ចំណូល ត្រូវដកយ៉ាងហោចណាស់ ១០% ទុកសន្សំជាដាច់ខាត មុនពេលយកទៅចំណាយលើប្រាក់ផ្សេងៗ។ ប្រាក់នេះជាមូលដ្ឋានគ្រឹះនៃទ្រព្យសម្បត្តិរបស់អ្នក។</p>
-                <div class="bg-goldLight p-4 rounded-lg">
-                    <p class="text-sm font-bold text-gold mb-2" data-km="ឧទាហរណ៍៖ ប្រាក់ខែ $392.75" data-en="Example: Salary $392.75">ឧទាហរណ៍៖ ប្រាក់ខែ $392.75</p>
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/50 transition-colors duration-300 mb-6">
+                <h3 class="text-xl font-header font-bold text-primary dark:text-blue-400 mb-2">១. <span data-km="ចាប់ផ្តើមបំប៉ោងផ្លូវរបស់អ្នក" data-en="Start Thy Purse to Fattening">ចាប់ផ្តើមបំប៉ោងផ្លូវរបស់អ្នក</span></h3>
+                <p class="text-sm text-gold dark:text-yellow-400 font-bold mb-2" data-km="ដាក់មាស ១០% ទុកសន្សំភ្លាមៗ" data-en="Save 10% of everything you earn">ដាក់មាស ១០% ទុកសន្សំភ្លាមៗ</p>
+                <p class="text-gray-600 dark:text-gray-300 text-sm mb-4" data-km="រាល់ពេលទទួលបានប្រាក់ចំណូល ត្រូវដកយ៉ាងហោចណាស់ ១០% ទុកសន្សំជាដាច់ខាត មុនពេលយកទៅចំណាយលើប្រាក់ផ្សេងៗ។ ប្រាក់នេះជាមូលដ្ឋានគ្រឹះនៃទ្រព្យសម្បត្តិរបស់អ្នក។" data-en="Every time you receive income, save at least 10% before spending on anything else. This money is the foundation of your wealth.">រាល់ពេលទទួលបានប្រាក់ចំណូល ត្រូវដកយ៉ាងហោចណាស់ ១០% ទុកសន្សំជាដាច់ខាត មុនពេលយកទៅចំណាយលើប្រាក់ផ្សេងៗ។ ប្រាក់នេះជាមូលដ្ឋានគ្រឹះនៃទ្រព្យសម្បត្តិរបស់អ្នក។</p>
+                <div class="bg-goldLight dark:bg-yellow-900/30 p-4 rounded-lg transition-colors duration-300">
+                    <p class="text-sm font-bold text-gold dark:text-yellow-400 mb-2" data-km="ឧទាហរណ៍៖ ប្រាក់ខែ $392.75" data-en="Example: Salary $392.75">ឧទាហរណ៍៖ ប្រាក់ខែ $392.75</p>
                     <p class="text-sm" data-km="សន្សំ ១០% = $39.28/ខែ = $471.36/ឆ្នាំ" data-en="Save 10% = $39.28/month = $471.36/year">សន្សំ ១០% = $39.28/ខែ = $471.36/ឆ្នាំ</p>
                 </div>
             </div>
 
             <!-- Cure 2 -->
-            <div class="bg-white p-6 rounded-xl shadow-sm mb-6">
-                <h3 class="text-xl font-header font-bold text-primary mb-2">២. <span data-km="គ្រប់គ្រងការចំណាយ" data-en="Control Thy Expenditures">គ្រប់គ្រងការចំណាយ</span></h3>
-                <p class="text-sm text-gold font-bold mb-2" data-km="បែងចែកឲ្យច្បាស់រវាងតម្រូវការ និងបំណងប្រាថ្នា" data-en="Distinguish clearly between needs and wants">បែងចែកឲ្យច្បាស់រវាងតម្រូវការ និងបំណងប្រាថ្នា</p>
-                <p class="text-gray-600 text-sm mb-4" data-km="ត្រូវបែងចែកឲ្យច្បាស់រវាង \"តម្រូវការចាំបាច់\" (Needs) និង \"បំណងប្រាថ្នា\" (Wants)។ កាត់បន្ថយការចំណាយមិនចាំបាច់ ដើម្បីកុំឲ្យការចំណាយកើនឡើងតាមទំហំចំណូល។" data-en="Clearly distinguish between needs and wants. Cut unnecessary expenses so spending doesn't grow with income.">ត្រូវបែងចែកឲ្យច្បាស់រវាង \"តម្រូវការចាំបាច់\" (Needs) និង \"បំណងប្រាថ្នា\" (Wants)។ កាត់បន្ថយការចំណាយមិនចាំបាច់ ដើម្បីកុំឲ្យការចំណាយកើនឡើងតាមទំហំចំណូល។</p>
-                <div class="bg-blue-50 p-4 rounded-lg">
-                    <p class="text-sm font-bold text-primary mb-2" data-km="ឧទាហរណ៍៖ កញ្ចប់ចំណាយ $274.92/ខែ" data-en="Example: Budget $274.92/month">ឧទាហរណ៍៖ កញ្ចប់ចំណាយ $274.92/ខែ</p>
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/50 transition-colors duration-300 mb-6">
+                <h3 class="text-xl font-header font-bold text-primary dark:text-blue-400 mb-2">២. <span data-km="គ្រប់គ្រងការចំណាយ" data-en="Control Thy Expenditures">គ្រប់គ្រងការចំណាយ</span></h3>
+                <p class="text-sm text-gold dark:text-yellow-400 font-bold mb-2" data-km="បែងចែកឲ្យច្បាស់រវាងតម្រូវការ និងបំណងប្រាថ្នា" data-en="Distinguish clearly between needs and wants">បែងចែកឲ្យច្បាស់រវាងតម្រូវការ និងបំណងប្រាថ្នា</p>
+                <p class="text-gray-600 dark:text-gray-300 text-sm mb-4" data-km="ត្រូវបែងចែកឲ្យច្បាស់រវាង \"តម្រូវការចាំបាច់\" (Needs) និង \"បំណងប្រាថ្នា\" (Wants)។ កាត់បន្ថយការចំណាយមិនចាំបាច់ ដើម្បីកុំឲ្យការចំណាយកើនឡើងតាមទំហំចំណូល។" data-en="Clearly distinguish between needs and wants. Cut unnecessary expenses so spending doesn't grow with income.">ត្រូវបែងចែកឲ្យច្បាស់រវាង \"តម្រូវការចាំបាច់\" (Needs) និង \"បំណងប្រាថ្នា\" (Wants)។ កាត់បន្ថយការចំណាយមិនចាំបាច់ ដើម្បីកុំឲ្យការចំណាយកើនឡើងតាមទំហំចំណូល។</p>
+                <div class="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg transition-colors duration-300">
+                    <p class="text-sm font-bold text-primary dark:text-blue-400 mb-2" data-km="ឧទាហរណ៍៖ កញ្ចប់ចំណាយ $274.92/ខែ" data-en="Example: Budget $274.92/month">ឧទាហរណ៍៖ កញ្ចប់ចំណាយ $274.92/ខែ</p>
                     <p class="text-sm" data-km="ហូបចុក + ជួលផ្ទះ + ទឹកភ្លើង + ដឹកជញ្ជូន = ត្រូវនៅក្នុងកញ្ចប់នេះ" data-en="Food + Rent + Utilities + Transport = Must stay within this budget">ហូបចុក + ជួលផ្ទះ + ទឹកភ្លើង + ដឹកជញ្ជូន = ត្រូវនៅក្នុងកញ្ចប់នេះ</p>
                 </div>
             </div>
 
             <!-- Cure 3 -->
-            <div class="bg-white p-6 rounded-xl shadow-sm mb-6">
-                <h3 class="text-xl font-header font-bold text-primary mb-2">៣. <span data-km="ធ្វើឱ្យមាសរបស់អ្នកកើនឡើង" data-en="Make Thy Gold Multiply">ធ្វើឱ្យមាសរបស់អ្នកកើនឡើង</span></h3>
-                <p class="text-sm text-gold font-bold mb-2" data-km="ប្រាក់សន្សំមិនត្រូវទុកចោលស្ងៀមៗឡើយ" data-en="Savings should not sit idle">ប្រាក់សន្សំមិនត្រូវទុកចោលស្ងៀមៗឡើយ</p>
-                <p class="text-gray-600 text-sm mb-4" data-km="ត្រូវយកប្រាក់សន្សំទៅវិនិយោគលើអាជីវកម្ម ឬទ្រព្យសកម្មណាដែលបង្កើនផលចំណេញ និងការប្រាក់ត្រឡប់មកវិញជាបន្តបន្ទាប់ (Compound Interest)។" data-en="Invest your savings in businesses or assets that generate returns and compound interest over time.">ត្រូវយកប្រាក់សន្សំទៅវិនិយោគលើអាជីវកម្ម ឬទ្រព្យសកម្មណាដែលបង្កើនផលចំណេញ និងការប្រាក់ត្រឡប់មកវិញជាបន្តបន្ទាប់ (Compound Interest)។</p>
-                <div class="bg-green-50 p-4 rounded-lg">
-                    <p class="text-sm font-bold text-success mb-2" data-km="ឧទាហរណ៍៖ ការប្រាក់រង" data-en="Example: Compound Interest">ឧទាហរណ៍៖ ការប្រាក់រង</p>
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/50 transition-colors duration-300 mb-6">
+                <h3 class="text-xl font-header font-bold text-primary dark:text-blue-400 mb-2">៣. <span data-km="ធ្វើឱ្យមាសរបស់អ្នកកើនឡើង" data-en="Make Thy Gold Multiply">ធ្វើឱ្យមាសរបស់អ្នកកើនឡើង</span></h3>
+                <p class="text-sm text-gold dark:text-yellow-400 font-bold mb-2" data-km="ប្រាក់សន្សំមិនត្រូវទុកចោលស្ងៀមៗឡើយ" data-en="Savings should not sit idle">ប្រាក់សន្សំមិនត្រូវទុកចោលស្ងៀមៗឡើយ</p>
+                <p class="text-gray-600 dark:text-gray-300 text-sm mb-4" data-km="ត្រូវយកប្រាក់សន្សំទៅវិនិយោគលើអាជីវកម្ម ឬទ្រព្យសកម្មណាដែលបង្កើនផលចំណេញ និងការប្រាក់ត្រឡប់មកវិញជាបន្តបន្ទាប់ (Compound Interest)។" data-en="Invest your savings in businesses or assets that generate returns and compound interest over time.">ត្រូវយកប្រាក់សន្សំទៅវិនិយោគលើអាជីវកម្ម ឬទ្រព្យសកម្មណាដែលបង្កើនផលចំណេញ និងការប្រាក់ត្រឡប់មកវិញជាបន្តបន្ទាប់ (Compound Interest)។</p>
+                <div class="bg-green-50 dark:bg-green-900/30 p-4 rounded-lg transition-colors duration-300">
+                    <p class="text-sm font-bold text-success dark:text-green-400 mb-2" data-km="ឧទាហរណ៍៖ ការប្រាក់រង" data-en="Example: Compound Interest">ឧទាហរណ៍៖ ការប្រាក់រង</p>
                     <p class="text-sm" data-km="$1,413.96 សន្សំ + ការប្រាក់ = កើនឡើងរៀងរាល់ឆ្នាំ" data-en="$1,413.96 savings + interest = grows every year">$1,413.96 សន្សំ + ការប្រាក់ = កើនឡើងរៀងរាល់ឆ្នាំ</p>
                 </div>
             </div>
 
             <!-- Cure 4 -->
-            <div class="bg-white p-6 rounded-xl shadow-sm mb-6">
-                <h3 class="text-xl font-header font-bold text-primary mb-2">៤. <span data-km="ការពារទ្រព្យសម្បត្តិពីហានិភ័យ" data-en="Guard Thy Treasures from Loss">ការពារទ្រព្យសម្បត្តិពីហានិភ័យ</span></h3>
-                <p class="text-sm text-gold font-bold mb-2" data-km="សុវត្ថិភាពនៃប្រាក់ដើមជាចំបាច់" data-en="Security of principal is essential">សុវត្ថិភាពនៃប្រាក់ដើមជាចំបាច់</p>
-                <p class="text-gray-600 text-sm" data-km="មុននឹងយកប្រាក់ទៅវិនិយោគ ត្រូវប្រាកដថាប្រាក់ដើមមានសុវត្ថិភាព។ ចៀសវាងការវិនិយោគលើអ្វីដែលអ្នកមិនយល់ច្បាស់ ឬការផ្តល់កម្ចីដល់មនុស្សដែលមិនគួរឲ្យទុកចិត្ត ព្រោះតែចង់បានផលចំណេញលឿនពេក។" data-en="Before investing, ensure your principal is safe. Avoid investing in things you don't understand or lending to untrustworthy people for quick returns.">មុននឹងយកប្រាក់ទៅវិនិយោគ ត្រូវប្រាកដថាប្រាក់ដើមមានសុវត្ថិភាព។ ចៀសវាងការវិនិយោគលើអ្វីដែលអ្នកមិនយល់ច្បាស់ ឬការផ្តល់កម្ចីដល់មនុស្សដែលមិនគួរឲ្យទុកចិត្ត ព្រោះតែចង់បានផលចំណេញលឿនពេក។</p>
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/50 transition-colors duration-300 mb-6">
+                <h3 class="text-xl font-header font-bold text-primary dark:text-blue-400 mb-2">៤. <span data-km="ការពារទ្រព្យសម្បត្តិពីហានិភ័យ" data-en="Guard Thy Treasures from Loss">ការពារទ្រព្យសម្បត្តិពីហានិភ័យ</span></h3>
+                <p class="text-sm text-gold dark:text-yellow-400 font-bold mb-2" data-km="សុវត្ថិភាពនៃប្រាក់ដើមជាចំបាច់" data-en="Security of principal is essential">សុវត្ថិភាពនៃប្រាក់ដើមជាចំបាច់</p>
+                <p class="text-gray-600 dark:text-gray-300 text-sm" data-km="មុននឹងយកប្រាក់ទៅវិនិយោគ ត្រូវប្រាកដថាប្រាក់ដើមមានសុវត្ថិភាព។ ចៀសវាងការវិនិយោគលើអ្វីដែលអ្នកមិនយល់ច្បាស់ ឬការផ្តល់កម្ចីដល់មនុស្សដែលមិនគួរឲ្យទុកចិត្ត ព្រោះតែចង់បានផលចំណេញលឿនពេក។" data-en="Before investing, ensure your principal is safe. Avoid investing in things you don't understand or lending to untrustworthy people for quick returns.">មុននឹងយកប្រាក់ទៅវិនិយោគ ត្រូវប្រាកដថាប្រាក់ដើមមានសុវត្ថិភាព។ ចៀសវាងការវិនិយោគលើអ្វីដែលអ្នកមិនយល់ច្បាស់ ឬការផ្តល់កម្ចីដល់មនុស្សដែលមិនគួរឲ្យទុកចិត្ត ព្រោះតែចង់បានផលចំណេញលឿនពេក។</p>
             </div>
 
             <!-- Cure 5 -->
-            <div class="bg-white p-6 rounded-xl shadow-sm mb-6">
-                <h3 class="text-xl font-header font-bold text-primary mb-2">៥. <span data-km="ធ្វើឱ្យលំនៅដ្ឋានរបស់អ្នកមានប្រាក់ចំណេញ" data-en="Make Thy Dwelling a Profitable Investment">ធ្វើឱ្យលំនៅដ្ឋានរបស់អ្នកមានប្រាក់ចំណេញ</span></h3>
-                <p class="text-gray-600 text-sm" data-km="ការមានផ្ទះផ្ទាល់ខ្លួនជួយកាត់បន្ថយថ្លៃចំណាយលើការជួល និងផ្តល់នូវអារម្មណ៍នឹងនរចិត្តសម្រាប់គ្រួសារ។" data-en="Owning a home reduces rent costs and provides peace of mind for your family.">ការមានផ្ទះផ្ទាល់ខ្លួនជួយកាត់បន្ថយថ្លៃចំណាយលើការជួល និងផ្តល់នូវអារម្មណ៍នឹងនរចិត្តសម្រាប់គ្រួសារ។</p>
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/50 transition-colors duration-300 mb-6">
+                <h3 class="text-xl font-header font-bold text-primary dark:text-blue-400 mb-2">៥. <span data-km="ធ្វើឱ្យលំនៅដ្ឋានរបស់អ្នកមានប្រាក់ចំណេញ" data-en="Make Thy Dwelling a Profitable Investment">ធ្វើឱ្យលំនៅដ្ឋានរបស់អ្នកមានប្រាក់ចំណេញ</span></h3>
+                <p class="text-gray-600 dark:text-gray-300 text-sm" data-km="ការមានផ្ទះផ្ទាល់ខ្លួនជួយកាត់បន្ថយថ្លៃចំណាយលើការជួល និងផ្តល់នូវអារម្មណ៍នឹងនរចិត្តសម្រាប់គ្រួសារ។" data-en="Owning a home reduces rent costs and provides peace of mind for your family.">ការមានផ្ទះផ្ទាល់ខ្លួនជួយកាត់បន្ថយថ្លៃចំណាយលើការជួល និងផ្តល់នូវអារម្មណ៍នឹងនរចិត្តសម្រាប់គ្រួសារ។</p>
             </div>
 
             <!-- Cure 6 -->
-            <div class="bg-white p-6 rounded-xl shadow-sm mb-6">
-                <h3 class="text-xl font-header font-bold text-primary mb-2">៦. <span data-km="ធានាចំណូលនាពេលអនាគត" data-en="Insure a Future Income">ធានាចំណូលនាពេលអនាគត</span></h3>
-                <p class="text-gray-600 text-sm" data-km="ត្រូវរៀបចំផែនការហិរញ្ញវត្ថុសម្រាប់វ័យចាស់ (ចូលនិវត្តន៍) និងការពារគ្រួសារ ប្រសិនបើមានហេតុការណ៍មិនប្រមើលមើលឃើញកើតឡើង។" data-en="Plan financially for old age (retirement) and protect your family in case of unforeseen events.">ត្រូវរៀបចំផែនការហិរញ្ញវត្ថុសម្រាប់វ័យចាស់ (ចូលនិវត្តន៍) និងការពារគ្រួសារ ប្រសិនបើមានហេតុការណ៍មិនប្រមើលមើលឃើញកើតឡើង។</p>
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/50 transition-colors duration-300 mb-6">
+                <h3 class="text-xl font-header font-bold text-primary dark:text-blue-400 mb-2">៦. <span data-km="ធានាចំណូលនាពេលអនាគត" data-en="Insure a Future Income">ធានាចំណូលនាពេលអនាគត</span></h3>
+                <p class="text-gray-600 dark:text-gray-300 text-sm" data-km="ត្រូវរៀបចំផែនការហិរញ្ញវត្ថុសម្រាប់វ័យចាស់ (ចូលនិវត្តន៍) និងការពារគ្រួសារ ប្រសិនបើមានហេតុការណ៍មិនប្រមើលមើលឃើញកើតឡើង។" data-en="Plan financially for old age (retirement) and protect your family in case of unforeseen events.">ត្រូវរៀបចំផែនការហិរញ្ញវត្ថុសម្រាប់វ័យចាស់ (ចូលនិវត្តន៍) និងការពារគ្រួសារ ប្រសិនបើមានហេតុការណ៍មិនប្រមើលមើលឃើញកើតឡើង។</p>
             </div>
 
             <!-- Cure 7 -->
-            <div class="bg-white p-6 rounded-xl shadow-sm mb-6">
-                <h3 class="text-xl font-header font-bold text-primary mb-2">៧. <span data-km="បង្កើនសមត្ថភាពរកប្រាក់" data-en="Increase Thy Ability to Earn">បង្កើនសមត្ថភាពរកប្រាក់</span></h3>
-                <p class="text-gray-600 text-sm" data-km="វិនិយោគលើចំណេះដឹង និងជំនាញខ្លួនឯងជាប្រចាំ។ កាលណាអ្នកមានជំនាញកាន់តែខ្ពស់ សមត្ថភាពរកប្រាក់របស់អ្នកក៏កាន់តែច្រើនទៅតាមនោះដែរ។" data-en="Invest in your knowledge and skills regularly. The more skilled you become, the more you can earn.">វិនិយោគលើចំណេះដឹង និងជំនាញខ្លួនឯងជាប្រចាំ។ កាលណាអ្នកមានជំនាញកាន់តែខ្ពស់ សមត្ថភាពរកប្រាក់របស់អ្នកក៏កាន់តែច្រើនទៅតាមនោះដែរ។</p>
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/50 transition-colors duration-300 mb-6">
+                <h3 class="text-xl font-header font-bold text-primary dark:text-blue-400 mb-2">៧. <span data-km="បង្កើនសមត្ថភាពរកប្រាក់" data-en="Increase Thy Ability to Earn">បង្កើនសមត្ថភាពរកប្រាក់</span></h3>
+                <p class="text-gray-600 dark:text-gray-300 text-sm" data-km="វិនិយោគលើចំណេះដឹង និងជំនាញខ្លួនឯងជាប្រចាំ។ កាលណាអ្នកមានជំនាញកាន់តែខ្ពស់ សមត្ថភាពរកប្រាក់របស់អ្នកក៏កាន់តែច្រើនទៅតាមនោះដែរ។" data-en="Invest in your knowledge and skills regularly. The more skilled you become, the more you can earn.">វិនិយោគលើចំណេះដឹង និងជំនាញខ្លួនឯងជាប្រចាំ។ កាលណាអ្នកមានជំនាញកាន់តែខ្ពស់ សមត្ថភាពរកប្រាក់របស់អ្នកក៏កាន់តែច្រើនទៅតាមនោះដែរ។</p>
             </div>
 
             <div class="flex justify-end">
-                <button onclick="app.nav('laws')" class="text-gold font-bold hover:underline" data-km="ទៅកាន់៖ ច្បាប់មាស →" data-en="Go to: Laws of Gold →">ទៅកាន់៖ ច្បាប់មាស →</button>
+                <button onclick="app.nav('laws')" class="text-gold dark:text-yellow-400 font-bold hover:underline" data-km="ទៅកាន់៖ ច្បាប់មាស →" data-en="Go to: Laws of Gold →">ទៅកាន់៖ ច្បាប់មាស →</button>
             </div>
         </div>
 
         <!-- 2. 5 LAWS OF GOLD -->
         <div id="page-laws" class="hidden fade-in">
-            <h2 class="text-3xl font-header font-bold text-gold mb-6 border-b-2 border-gold pb-2" data-km="៥. ច្បាប់នៃមាស (5 Laws of Gold)" data-en="5. Laws of Gold">៥. ច្បាប់នៃមាស (5 Laws of Gold)</h2>
+            <h2 class="text-3xl font-header font-bold text-gold dark:text-yellow-400 mb-6 border-b-2 border-gold pb-2" data-km="៥. ច្បាប់នៃមាស (5 Laws of Gold)" data-en="5. Laws of Gold">៥. ច្បាប់នៃមាស (5 Laws of Gold)</h2>
 
             <div class="space-y-6">
                 <!-- Law 1 -->
-                <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-gold">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/50 transition-colors duration-300 border-l-4 border-gold">
                     <div class="flex items-start">
-                        <span class="text-4xl font-header font-bold text-gold mr-4">១</span>
+                        <span class="text-4xl font-header font-bold text-gold dark:text-yellow-400 mr-4">១</span>
                         <div>
-                            <h3 class="text-lg font-header font-bold text-primary" data-km="មាសមករកអ្នកសន្សំដោយចិត្តរីករាយ" data-en="Gold comes gladly to those who save">មាសមករកអ្នកសន្សំដោយចិត្តរីករាយ</h3>
-                            <p class="text-gray-600 text-sm mt-2" data-km="អ្នកដែលសន្សំ ១០% នៃចំណូលរបស់គាត់ នឹងឃើញមាសកើនឡើងរៀងរាល់ខែ។ ការសន្សំជាទម្លាប់ដែលត្រូវរក្សាជារៀងរាល់ខែ សូម្បីតែនៅពេលអ្នកមានប្រាក់ច្រើន។" data-en="Those who save 10% of their income will see gold grow every month. Saving is a habit that must be maintained every month, even when you have more money.">អ្នកដែលសន្សំ ១០% នៃចំណូលរបស់គាត់ នឹងឃើញមាសកើនឡើងរៀងរាល់ខែ។ ការសន្សំជាទម្លាប់ដែលត្រូវរក្សាជារៀងរាល់ខែ សូម្បីតែនៅពេលអ្នកមានប្រាក់ច្រើន។</p>
+                            <h3 class="text-lg font-header font-bold text-primary dark:text-blue-400" data-km="មាសមករកអ្នកសន្សំដោយចិត្តរីករាយ" data-en="Gold comes gladly to those who save">មាសមករកអ្នកសន្សំដោយចិត្តរីករាយ</h3>
+                            <p class="text-gray-600 dark:text-gray-300 text-sm mt-2" data-km="អ្នកដែលសន្សំ ១០% នៃចំណូលរបស់គាត់ នឹងឃើញមាសកើនឡើងរៀងរាល់ខែ។ ការសន្សំជាទម្លាប់ដែលត្រូវរក្សាជារៀងរាល់ខែ សូម្បីតែនៅពេលអ្នកមានប្រាក់ច្រើន។" data-en="Those who save 10% of their income will see gold grow every month. Saving is a habit that must be maintained every month, even when you have more money.">អ្នកដែលសន្សំ ១០% នៃចំណូលរបស់គាត់ នឹងឃើញមាសកើនឡើងរៀងរាល់ខែ។ ការសន្សំជាទម្លាប់ដែលត្រូវរក្សាជារៀងរាល់ខែ សូម្បីតែនៅពេលអ្នកមានប្រាក់ច្រើន។</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Law 2 -->
-                <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-gold">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/50 transition-colors duration-300 border-l-4 border-gold">
                     <div class="flex items-start">
-                        <span class="text-4xl font-header font-bold text-gold mr-4">២</span>
+                        <span class="text-4xl font-header font-bold text-gold dark:text-yellow-400 mr-4">២</span>
                         <div>
-                            <h3 class="text-lg font-header font-bold text-primary" data-km="មាសធ្វើការដ៏ឧស្សាហ៍សម្រាប់ម្ចាស់ប្រាជ្ញា" data-en="Gold labors diligently for the wise owner">មាសធ្វើការដ៏ឧស្សាហ៍សម្រាប់ម្ចាស់ប្រាជ្ញា</h3>
-                            <p class="text-gray-600 text-sm mt-2" data-km="មាសដែលយើងវិនិយោគនឹងធ្វើការដើម្បីបង្កើនផលចំណេញ។ វាដូចជាការដាក់ទាហានឱ្យធ្វើការ ២៤ ម៉ោងក្នុងមួយថ្ងៃ។ ត្រូវរកទីកន្លែងដែលមាសអាចធ្វើការបាន។" data-en="Gold we invest will work to generate returns. Like soldiers working 24 hours a day. Find places where gold can work.">មាសដែលយើងវិនិយោគនឹងធ្វើការដើម្បីបង្កើនផលចំណេញ។ វាដូចជាការដាក់ទាហានឱ្យធ្វើការ ២៤ ម៉ោងក្នុងមួយថ្ងៃ។ ត្រូវរកទីកន្លែងដែលមាសអាចធ្វើការបាន។</p>
+                            <h3 class="text-lg font-header font-bold text-primary dark:text-blue-400" data-km="មាសធ្វើការដ៏ឧស្សាហ៍សម្រាប់ម្ចាស់ប្រាជ្ញា" data-en="Gold labors diligently for the wise owner">មាសធ្វើការដ៏ឧស្សាហ៍សម្រាប់ម្ចាស់ប្រាជ្ញា</h3>
+                            <p class="text-gray-600 dark:text-gray-300 text-sm mt-2" data-km="មាសដែលយើងវិនិយោគនឹងធ្វើការដើម្បីបង្កើនផលចំណេញ។ វាដូចជាការដាក់ទាហានឱ្យធ្វើការ ២៤ ម៉ោងក្នុងមួយថ្ងៃ។ ត្រូវរកទីកន្លែងដែលមាសអាចធ្វើការបាន។" data-en="Gold we invest will work to generate returns. Like soldiers working 24 hours a day. Find places where gold can work.">មាសដែលយើងវិនិយោគនឹងធ្វើការដើម្បីបង្កើនផលចំណេញ។ វាដូចជាការដាក់ទាហានឱ្យធ្វើការ ២៤ ម៉ោងក្នុងមួយថ្ងៃ។ ត្រូវរកទីកន្លែងដែលមាសអាចធ្វើការបាន។</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Law 3 -->
-                <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-gold">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/50 transition-colors duration-300 border-l-4 border-gold">
                     <div class="flex items-start">
-                        <span class="text-4xl font-header font-bold text-gold mr-4">៣</span>
+                        <span class="text-4xl font-header font-bold text-gold dark:text-yellow-400 mr-4">៣</span>
                         <div>
-                            <h3 class="text-lg font-header font-bold text-primary" data-km="មាសស្ថិតនៅជាមួយម្ចាស់ប្រាជ្ញា" data-en="Gold clings to the wise owner">មាសស្ថិតនៅជាមួយម្ចាស់ប្រាជ្ញា</h3>
-                            <p class="text-gray-600 text-sm mt-2" data-km="មាសស្ថិតនៅជាមួយអ្នកដែលមានប្រាជ្ញាវិនិយោគ។ អ្នកដែលមានប្រាជ្ញានឹងរក្សាទុកមាសរបស់គាត់នៅជាមួយអ្នកដែលគាត់ទុកចិត្ត ដូច្នេះវានឹងនៅតែមានសុវត្ថិភាព។" data-en="Gold stays with the wise investor. The wise keep their gold with those they trust, so it remains safe.">មាសស្ថិតនៅជាមួយអ្នកដែលមានប្រាជ្ញាវិនិយោគ។ អ្នកដែលមានប្រាជ្ញានឹងរក្សាទុកមាសរបស់គាត់នៅជាមួយអ្នកដែលគាត់ទុកចិត្ត ដូច្នេះវានឹងនៅតែមានសុវត្ថិភាព។</p>
+                            <h3 class="text-lg font-header font-bold text-primary dark:text-blue-400" data-km="មាសស្ថិតនៅជាមួយម្ចាស់ប្រាជ្ញា" data-en="Gold clings to the wise owner">មាសស្ថិតនៅជាមួយម្ចាស់ប្រាជ្ញា</h3>
+                            <p class="text-gray-600 dark:text-gray-300 text-sm mt-2" data-km="មាសស្ថិតនៅជាមួយអ្នកដែលមានប្រាជ្ញាវិនិយោគ។ អ្នកដែលមានប្រាជ្ញានឹងរក្សាទុកមាសរបស់គាត់នៅជាមួយអ្នកដែលគាត់ទុកចិត្ត ដូច្នេះវានឹងនៅតែមានសុវត្ថិភាព។" data-en="Gold stays with the wise investor. The wise keep their gold with those they trust, so it remains safe.">មាសស្ថិតនៅជាមួយអ្នកដែលមានប្រាជ្ញាវិនិយោគ។ អ្នកដែលមានប្រាជ្ញានឹងរក្សាទុកមាសរបស់គាត់នៅជាមួយអ្នកដែលគាត់ទុកចិត្ត ដូច្នេះវានឹងនៅតែមានសុវត្ថិភាព។</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Law 4 -->
-                <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-danger">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/50 transition-colors duration-300 border-l-4 border-danger">
                     <div class="flex items-start">
-                        <span class="text-4xl font-header font-bold text-danger mr-4">៤</span>
+                        <span class="text-4xl font-header font-bold text-danger dark:text-red-400 mr-4">៤</span>
                         <div>
-                            <h3 class="text-lg font-header font-bold text-primary" data-km="មាសរត់ចេញពីម្ចាស់ល្ពៅ" data-en="Gold slips away from the foolish">មាសរត់ចេញពីម្ចាស់ល្ពៅ</h3>
-                            <p class="text-gray-600 text-sm mt-2" data-km="មាសរត់ចេញពីអ្នកដែលស្តាប់គំនិតល្ពៅ ឬអ្នកដែលវិនិយោគដោយមិនគិត។ អ្នកដែលមិនមានប្រាជ្ញាវិនិយោគនឹងបាត់បង់មាសរបស់គាត់។" data-en="Gold flees from those who listen to fools or invest without thinking. The unwise investor will lose their gold.">មាសរត់ចេញពីអ្នកដែលស្តាប់គំនិតល្ពៅ ឬអ្នកដែលវិនិយោគដោយមិនគិត។ អ្នកដែលមិនមានប្រាជ្ញាវិនិយោគនឹងបាត់បង់មាសរបស់គាត់។</p>
+                            <h3 class="text-lg font-header font-bold text-primary dark:text-blue-400" data-km="មាសរត់ចេញពីម្ចាស់ល្ពៅ" data-en="Gold slips away from the foolish">មាសរត់ចេញពីម្ចាស់ល្ពៅ</h3>
+                            <p class="text-gray-600 dark:text-gray-300 text-sm mt-2" data-km="មាសរត់ចេញពីអ្នកដែលស្តាប់គំនិតល្ពៅ ឬអ្នកដែលវិនិយោគដោយមិនគិត។ អ្នកដែលមិនមានប្រាជ្ញាវិនិយោគនឹងបាត់បង់មាសរបស់គាត់។" data-en="Gold flees from those who listen to fools or invest without thinking. The unwise investor will lose their gold.">មាសរត់ចេញពីអ្នកដែលស្តាប់គំនិតល្ពៅ ឬអ្នកដែលវិនិយោគដោយមិនគិត។ អ្នកដែលមិនមានប្រាជ្ញាវិនិយោគនឹងបាត់បង់មាសរបស់គាត់។</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Law 5 -->
-                <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-danger">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/50 transition-colors duration-300 border-l-4 border-danger">
                     <div class="flex items-start">
-                        <span class="text-4xl font-header font-bold text-danger mr-4">៥</span>
+                        <span class="text-4xl font-header font-bold text-danger dark:text-red-400 mr-4">៥</span>
                         <div>
-                            <h3 class="text-lg font-header font-bold text-primary" data-km="មាសភ័យខ្លាចមនុស្សដែលបង្ខំវា" data-en="Gold flees from the one who forces it">មាសភ័យខ្លាចមនុស្សដែលបង្ខំវា</h3>
-                            <p class="text-gray-600 text-sm mt-2" data-km="អ្នកដែលព្យាយាមរកប្រាក់លឿនពេក ឬវិនិយោគដោយគ្មានការស្រាវជ្រាវគ្រប់គ្រាន់ នឹងបាត់បង់មាសរបស់គាត់។ ត្រូវអត់ធ្មត់ និងវិនិយោគដោយប្រាជ្ញា។" data-en="Those who try to make money too fast or invest without proper research will lose their gold. Be patient and invest wisely.">អ្នកដែលព្យាយាមរកប្រាក់លឿនពេក ឬវិនិយោគដោយគ្មានការស្រាវជ្រាវគ្រប់គ្រាន់ នឹងបាត់បង់មាសរបស់គាត់។ ត្រូវអត់ធ្មត់ និងវិនិយោគដោយប្រាជ្ញា។</p>
+                            <h3 class="text-lg font-header font-bold text-primary dark:text-blue-400" data-km="មាសភ័យខ្លាចមនុស្សដែលបង្ខំវា" data-en="Gold flees from the one who forces it">មាសភ័យខ្លាចមនុស្សដែលបង្ខំវា</h3>
+                            <p class="text-gray-600 dark:text-gray-300 text-sm mt-2" data-km="អ្នកដែលព្យាយាមរកប្រាក់លឿនពេក ឬវិនិយោគដោយគ្មានការស្រាវជ្រាវគ្រប់គ្រាន់ នឹងបាត់បង់មាសរបស់គាត់។ ត្រូវអត់ធ្មត់ និងវិនិយោគដោយប្រាជ្ញា។" data-en="Those who try to make money too fast or invest without proper research will lose their gold. Be patient and invest wisely.">អ្នកដែលព្យាយាមរកប្រាក់លឿនពេក ឬវិនិយោគដោយគ្មានការស្រាវជ្រាវគ្រប់គ្រាន់ នឹងបាត់បង់មាសរបស់គាត់។ ត្រូវអត់ធ្មត់ និងវិនិយោគដោយប្រាជ្ញា។</p>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="flex justify-end mt-6">
-                <button onclick="app.nav('calculator')" class="text-gold font-bold hover:underline" data-km="ទៅកាន់៖ គណនា →" data-en="Go to: Calculator →">ទៅកាន់៖ គណនា →</button>
+                <button onclick="app.nav('calculator')" class="text-gold dark:text-yellow-400 font-bold hover:underline" data-km="ទៅកាន់៖ គណនា →" data-en="Go to: Calculator →">ទៅកាន់៖ គណនា →</button>
             </div>
         </div>
 
         <!-- 3. 10/20/70 BUDGET CALCULATOR -->
         <div id="page-calculator" class="hidden fade-in">
-            <h2 class="text-3xl font-header font-bold text-gold mb-6 border-b-2 border-gold pb-2" data-km="កម្មវិធីគណនាថវិកា ១០/២០/៧០" data-en="10/20/70 Budget Calculator">កម្មវិធីគណនាថវិកា ១០/២០/៧០</h2>
+            <h2 class="text-3xl font-header font-bold text-gold dark:text-yellow-400 mb-6 border-b-2 border-gold pb-2" data-km="កម្មវិធីគណនាថវិកា ១០/២០/៧០" data-en="10/20/70 Budget Calculator">កម្មវិធីគណនាថវិកា ១០/២០/៧០</h2>
 
             <!-- Input -->
-            <div class="bg-white p-6 rounded-xl shadow-sm mb-8">
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/50 transition-colors duration-300 mb-8">
                 <h3 class="font-bold text-lg mb-4" data-km="ព័ត៌មានប្រាក់ខែរបស់អ្នក" data-en="Your Salary Information">ព័ត៌មានប្រាក់ខែរបស់អ្នក</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-sm font-bold text-gray-600 mb-1" data-km="បើកលើកទី១ ($)" data-en="First Payment ($)">បើកលើកទី១ ($)</label>
-                        <input type="number" id="salary1" value="200" step="0.01" onchange="app.calcBudget()" class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-gold focus:outline-none">
+                        <label class="block text-sm font-bold text-gray-600 dark:text-gray-300 mb-1" data-km="បើកលើកទី១ ($)" data-en="First Payment ($)">បើកលើកទី១ ($)</label>
+                        <input type="number" id="salary1" value="200" step="0.01" onchange="app.calcBudget()" class="w-full border dark:border-gray-600 rounded-lg px-4 py-2 bg-white dark:bg-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-gold focus:outline-none transition-colors duration-300">
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-600 mb-1" data-km="បើកលើកទី២ ($)" data-en="Second Payment ($)">បើកលើកទី២ ($)</label>
-                        <input type="number" id="salary2" value="192.75" step="0.01" onchange="app.calcBudget()" class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-gold focus:outline-none">
+                        <label class="block text-sm font-bold text-gray-600 dark:text-gray-300 mb-1" data-km="បើកលើកទី២ ($)" data-en="Second Payment ($)">បើកលើកទី២ ($)</label>
+                        <input type="number" id="salary2" value="192.75" step="0.01" onchange="app.calcBudget()" class="w-full border dark:border-gray-600 rounded-lg px-4 py-2 bg-white dark:bg-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-gold focus:outline-none transition-colors duration-300">
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-600 mb-1" data-km="បំណុលប្រចាំខែ ($)" data-en="Monthly Debt ($)">បំណុលប្រចាំខែ ($)</label>
-                        <input type="number" id="debt" value="0" step="0.01" onchange="app.calcBudget()" class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-gold focus:outline-none">
+                        <label class="block text-sm font-bold text-gray-600 dark:text-gray-300 mb-1" data-km="បំណុលប្រចាំខែ ($)" data-en="Monthly Debt ($)">បំណុលប្រចាំខែ ($)</label>
+                        <input type="number" id="debt" value="0" step="0.01" onchange="app.calcBudget()" class="w-full border dark:border-gray-600 rounded-lg px-4 py-2 bg-white dark:bg-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-gold focus:outline-none transition-colors duration-300">
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-600 mb-1" data-km="សរុបប្រាក់ខែ ($)" data-en="Total Salary ($)">សរុបប្រាក់ខែ ($)</label>
-                        <input type="text" id="totalSalary" readonly class="w-full border rounded-lg px-4 py-2 bg-gray-100 font-bold text-primary">
+                        <label class="block text-sm font-bold text-gray-600 dark:text-gray-300 mb-1" data-km="សរុបប្រាក់ខែ ($)" data-en="Total Salary ($)">សរុបប្រាក់ខែ ($)</label>
+                        <input type="text" id="totalSalary" readonly class="w-full border dark:border-gray-600 rounded-lg px-4 py-2 bg-gray-100 dark:bg-gray-700 dark:text-gray-200 font-bold text-primary dark:text-blue-400 dark:text-blue-400">
                     </div>
                 </div>
             </div>
 
             <!-- Output Table -->
-            <div class="bg-white p-6 rounded-xl shadow-sm mb-8 overflow-x-auto">
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/50 transition-colors duration-300 mb-8 overflow-x-auto">
                 <h3 class="font-bold text-lg mb-4" data-km="លទ្ធផលបែងចែក" data-en="Allocation Results">លទ្ធផលបែងចែក</h3>
-                <table class="w-full text-sm text-left border">
-                    <thead class="bg-gray-100">
+                <table class="w-full text-sm text-left border dark:border-gray-600">
+                    <thead class="bg-gray-100 dark:bg-gray-700 transition-colors duration-300">
                         <tr>
                             <th class="px-4 py-3 font-bold" data-km="កញ្ចប់ថវិកា" data-en="Budget Category">កញ្ចប់ថវិកា</th>
                             <th class="px-4 py-3 font-bold text-center">%</th>
@@ -310,76 +321,76 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="border-b bg-green-50">
-                            <td class="px-4 py-3 font-bold text-success" data-km="សន្សំ/វិនិយោគ" data-en="Save/Invest">សន្សំ/វិនិយោគ</td>
+                        <tr class="border-b dark:border-gray-600 bg-green-50 dark:bg-green-900/30 transition-colors duration-300">
+                            <td class="px-4 py-3 font-bold text-success dark:text-green-400" data-km="សន្សំ/វិនិយោគ" data-en="Save/Invest">សន្សំ/វិនិយោគ</td>
                             <td class="px-4 py-3 text-center">10%</td>
                             <td class="px-4 py-3 text-right font-bold" id="save1">$20.00</td>
                             <td class="px-4 py-3 text-right font-bold" id="save2">$19.28</td>
-                            <td class="px-4 py-3 text-right font-bold text-success" id="saveTotal">$39.28</td>
+                            <td class="px-4 py-3 text-right font-bold text-success dark:text-green-400" id="saveTotal">$39.28</td>
                         </tr>
-                        <tr class="border-b bg-yellow-50">
-                            <td class="px-4 py-3 font-bold text-gold" data-km="សងបំណុល" data-en="Pay Debt">សងបំណុល</td>
+                        <tr class="border-b dark:border-gray-600 bg-yellow-50 dark:bg-yellow-900/30 transition-colors duration-300">
+                            <td class="px-4 py-3 font-bold text-gold dark:text-yellow-400" data-km="សងបំណុល" data-en="Pay Debt">សងបំណុល</td>
                             <td class="px-4 py-3 text-center">20%</td>
                             <td class="px-4 py-3 text-right font-bold" id="debt1">$40.00</td>
                             <td class="px-4 py-3 text-right font-bold" id="debt2">$38.55</td>
-                            <td class="px-4 py-3 text-right font-bold text-gold" id="debtTotal">$78.55</td>
+                            <td class="px-4 py-3 text-right font-bold text-gold dark:text-yellow-400" id="debtTotal">$78.55</td>
                         </tr>
-                        <tr class="border-b bg-blue-50">
-                            <td class="px-4 py-3 font-bold text-primary" data-km="ចំណាយប្រចាំថ្ងៃ" data-en="Daily Expenses">ចំណាយប្រចាំថ្ងៃ</td>
+                        <tr class="border-b dark:border-gray-600 bg-blue-50 dark:bg-blue-900/30 transition-colors duration-300">
+                            <td class="px-4 py-3 font-bold text-primary dark:text-blue-400" data-km="ចំណាយប្រចាំថ្ងៃ" data-en="Daily Expenses">ចំណាយប្រចាំថ្ងៃ</td>
                             <td class="px-4 py-3 text-center">70%</td>
                             <td class="px-4 py-3 text-right font-bold" id="exp1">$140.00</td>
                             <td class="px-4 py-3 text-right font-bold" id="exp2">$134.92</td>
-                            <td class="px-4 py-3 text-right font-bold text-primary" id="expTotal">$274.92</td>
+                            <td class="px-4 py-3 text-right font-bold text-primary dark:text-blue-400" id="expTotal">$274.92</td>
                         </tr>
                     </tbody>
                 </table>
 
                 <!-- No Debt Note -->
-                <div id="noDebtNote" class="hidden bg-green-50 p-4 rounded-lg mt-4 border border-green-200">
-                    <p class="text-sm font-bold text-success" data-km="💡 អ្នកគ្មានបំណុល! → សន្សំសរុប ៣០% = $117.83/ខែ = $1,413.96/ឆ្នាំ" data-en="💡 No debt! → Total savings 30% = $117.83/month = $1,413.96/year">💡 អ្នកគ្មានបំណុល! → សន្សំសរុប ៣០% = $117.83/ខែ = $1,413.96/ឆ្នាំ</p>
+                <div id="noDebtNote" class="hidden bg-green-50 dark:bg-green-900/30 p-4 rounded-lg transition-colors duration-300 mt-4 border border-green-200 dark:border-green-800">
+                    <p class="text-sm font-bold text-success dark:text-green-400" data-km="💡 អ្នកគ្មានបំណុល! → សន្សំសរុប ៣០% = $117.83/ខែ = $1,413.96/ឆ្នាំ" data-en="💡 No debt! → Total savings 30% = $117.83/month = $1,413.96/year">💡 អ្នកគ្មានបំណុល! → សន្សំសរុប ៣០% = $117.83/ខែ = $1,413.96/ឆ្នាំ</p>
                 </div>
             </div>
 
             <!-- 1-Year Projection -->
-            <div class="bg-white p-6 rounded-xl shadow-sm mb-8">
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/50 transition-colors duration-300 mb-8">
                 <h3 class="font-bold text-lg mb-4" data-km="ការព្យ망忧ក្នុង ១ ឆ្នាំ" data-en="1-Year Projection">ការព្យាករណ៍ក្នុង ១ ឆ្នាំ</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-green-50 p-4 rounded-lg border border-green-200">
-                        <p class="font-bold text-success mb-2" data-km="ករណីមានបំណុល (សន្សំ ១០%)" data-en="With Debt (Save 10%)">ករណីមានបំណុល (សន្សំ ១០%)</p>
+                    <div class="bg-green-50 dark:bg-green-900/30 p-4 rounded-lg transition-colors duration-300 border border-green-200 dark:border-green-800">
+                        <p class="font-bold text-success dark:text-green-400 mb-2" data-km="ករណីមានបំណុល (សន្សំ ១០%)" data-en="With Debt (Save 10%)">ករណីមានបំណុល (សន្សំ ១០%)</p>
                         <p class="text-2xl font-header font-bold" id="yearDebt">$471.36</p>
-                        <p class="text-sm text-gray-600" data-km="ក្នុង ១ ឆ្នាំ" data-en="in 1 year">ក្នុង ១ ឆ្នាំ</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-300" data-km="ក្នុង ១ ឆ្នាំ" data-en="in 1 year">ក្នុង ១ ឆ្នាំ</p>
                     </div>
-                    <div class="bg-green-50 p-4 rounded-lg border border-green-200">
-                        <p class="font-bold text-success mb-2" data-km="ករណីគ្មានបំណុល (សន្សំ ៣០%)" data-en="No Debt (Save 30%)">ករណីគ្មានបំណុល (សន្សំ ៣០%)</p>
+                    <div class="bg-green-50 dark:bg-green-900/30 p-4 rounded-lg transition-colors duration-300 border border-green-200 dark:border-green-800">
+                        <p class="font-bold text-success dark:text-green-400 mb-2" data-km="ករណីគ្មានបំណុល (សន្សំ ៣០%)" data-en="No Debt (Save 30%)">ករណីគ្មានបំណុល (សន្សំ ៣០%)</p>
                         <p class="text-2xl font-header font-bold" id="yearNoDebt">$1,413.96</p>
-                        <p class="text-sm text-gray-600" data-km="ក្នុង ១ ឆ្នាំ" data-en="in 1 year">ក្នុង ១ ឆ្នាំ</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-300" data-km="ក្នុង ១ ឆ្នាំ" data-en="in 1 year">ក្នុង ១ ឆ្នាំ</p>
                     </div>
                 </div>
             </div>
 
             <div class="flex justify-end">
-                <button onclick="app.nav('savings')" class="text-gold font-bold hover:underline" data-km="ទៅកាន់៖ ការលូតលាស់ →" data-en="Go to: Growth Calculator →">ទៅកាន់៖ ការលូតលាស់ →</button>
+                <button onclick="app.nav('savings')" class="text-gold dark:text-yellow-400 font-bold hover:underline" data-km="ទៅកាន់៖ ការលូតលាស់ →" data-en="Go to: Growth Calculator →">ទៅកាន់៖ ការលូតលាស់ →</button>
             </div>
         </div>
 
         <!-- 4. SAVINGS GROWTH CALCULATOR -->
         <div id="page-savings" class="hidden fade-in">
-            <h2 class="text-3xl font-header font-bold text-gold mb-6 border-b-2 border-gold pb-2" data-km="ការលូតលាស់នៃប្រាក់សន្សំ" data-en="Savings Growth Calculator">ការលូតលាស់នៃប្រាក់សន្សំ</h2>
+            <h2 class="text-3xl font-header font-bold text-gold dark:text-yellow-400 mb-6 border-b-2 border-gold pb-2" data-km="ការលូតលាស់នៃប្រាក់សន្សំ" data-en="Savings Growth Calculator">ការលូតលាស់នៃប្រាក់សន្សំ</h2>
 
-            <div class="bg-white p-6 rounded-xl shadow-sm mb-8">
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/50 transition-colors duration-300 mb-8">
                 <h3 class="font-bold text-lg mb-4" data-km="ព័ត៌មានវិនិយោគ" data-en="Investment Information">ព័ត៌មានវិនិយោគ</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-sm font-bold text-gray-600 mb-1" data-km="ប្រាក់សន្សំប្រចាំខែ ($)" data-en="Monthly Savings ($)">ប្រាក់សន្សំប្រចាំខែ ($)</label>
-                        <input type="number" id="monthlySave" value="39.28" step="0.01" onchange="app.calcGrowth()" class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-gold focus:outline-none">
+                        <label class="block text-sm font-bold text-gray-600 dark:text-gray-300 mb-1" data-km="ប្រាក់សន្សំប្រចាំខែ ($)" data-en="Monthly Savings ($)">ប្រាក់សន្សំប្រចាំខែ ($)</label>
+                        <input type="number" id="monthlySave" value="39.28" step="0.01" onchange="app.calcGrowth()" class="w-full border dark:border-gray-600 rounded-lg px-4 py-2 bg-white dark:bg-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-gold focus:outline-none transition-colors duration-300">
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-600 mb-1" data-km="អត្រាការប្រាក់ប្រចាំឆ្នាំ (%)" data-en="Annual Interest Rate (%)">អត្រាការប្រាក់ប្រចាំឆ្នាំ (%)</label>
-                        <input type="number" id="interestRate" value="3" step="0.1" onchange="app.calcGrowth()" class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-gold focus:outline-none">
+                        <label class="block text-sm font-bold text-gray-600 dark:text-gray-300 mb-1" data-km="អត្រាការប្រាក់ប្រចាំឆ្នាំ (%)" data-en="Annual Interest Rate (%)">អត្រាការប្រាក់ប្រចាំឆ្នាំ (%)</label>
+                        <input type="number" id="interestRate" value="3" step="0.1" onchange="app.calcGrowth()" class="w-full border dark:border-gray-600 rounded-lg px-4 py-2 bg-white dark:bg-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-gold focus:outline-none transition-colors duration-300">
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-600 mb-1" data-km="រយៈពេល (ឆ្នាំ)" data-en="Duration (Years)">រយៈពេល (ឆ្នាំ)</label>
-                        <select id="duration" onchange="app.calcGrowth()" class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-gold focus:outline-none">
+                        <label class="block text-sm font-bold text-gray-600 dark:text-gray-300 mb-1" data-km="រយៈពេល (ឆ្នាំ)" data-en="Duration (Years)">រយៈពេល (ឆ្នាំ)</label>
+                        <select id="duration" onchange="app.calcGrowth()" class="w-full border dark:border-gray-600 rounded-lg px-4 py-2 bg-white dark:bg-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-gold focus:outline-none transition-colors duration-300">
                             <option value="1">១ ឆ្នាំ</option>
                             <option value="3">៣ ឆ្នាំ</option>
                             <option value="5" selected>៥ ឆ្នាំ</option>
@@ -392,22 +403,22 @@
 
             <!-- Results -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div class="bg-white p-6 rounded-xl shadow-sm text-center">
-                    <p class="text-sm text-gray-500" data-km="ប្រាក់ដាក់សន្សំសរុប" data-en="Total Deposited">ប្រាក់ដាក់សន្សំសរុប</p>
-                    <p class="text-2xl font-header font-bold text-primary mt-2" id="totalDeposited">$2,356.80</p>
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/50 transition-colors duration-300 text-center">
+                    <p class="text-sm text-gray-500 dark:text-gray-400" data-km="ប្រាក់ដាក់សន្សំសរុប" data-en="Total Deposited">ប្រាក់ដាក់សន្សំសរុប</p>
+                    <p class="text-2xl font-header font-bold text-primary dark:text-blue-400 mt-2" id="totalDeposited">$2,356.80</p>
                 </div>
-                <div class="bg-white p-6 rounded-xl shadow-sm text-center">
-                    <p class="text-sm text-gray-500" data-km="ការប្រាក់ដែលបាន" data-en="Interest Earned">ការប្រាក់ដែលបាន</p>
-                    <p class="text-2xl font-header font-bold text-success mt-2" id="interestEarned">$188.93</p>
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/50 transition-colors duration-300 text-center">
+                    <p class="text-sm text-gray-500 dark:text-gray-400" data-km="ការប្រាក់ដែលបាន" data-en="Interest Earned">ការប្រាក់ដែលបាន</p>
+                    <p class="text-2xl font-header font-bold text-success dark:text-green-400 mt-2" id="interestEarned">$188.93</p>
                 </div>
-                <div class="bg-white p-6 rounded-xl shadow-sm text-center">
-                    <p class="text-sm text-gray-500" data-km="សរុបសន្សំ" data-en="Total Savings">សរុបសន្សំ</p>
-                    <p class="text-2xl font-header font-bold text-gold mt-2" id="totalSavings">$2,545.73</p>
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/50 transition-colors duration-300 text-center">
+                    <p class="text-sm text-gray-500 dark:text-gray-400" data-km="សរុបសន្សំ" data-en="Total Savings">សរុបសន្សំ</p>
+                    <p class="text-2xl font-header font-bold text-gold dark:text-yellow-400 mt-2" id="totalSavings">$2,545.73</p>
                 </div>
             </div>
 
             <!-- Chart -->
-            <div class="bg-white p-6 rounded-xl shadow-sm mb-8">
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/50 transition-colors duration-300 mb-8">
                 <h3 class="font-bold text-lg mb-4 text-center" data-km="ការលូតលាស់នៃប្រាក់សន្សំ" data-en="Savings Growth Over Time">ការលូតលាស់នៃប្រាក់សន្សំ</h3>
                 <div class="chart-wrapper">
                     <canvas id="growthChart"></canvas>
@@ -415,25 +426,25 @@
             </div>
 
             <div class="flex justify-end">
-                <button onclick="app.nav('expenses')" class="text-gold font-bold hover:underline" data-km="ទៅកាន់៖ ចំណាយ →" data-en="Go to: Expenses →">ទៅកាន់៖ ចំណាយ →</button>
+                <button onclick="app.nav('expenses')" class="text-gold dark:text-yellow-400 font-bold hover:underline" data-km="ទៅកាន់៖ ចំណាយ →" data-en="Go to: Expenses →">ទៅកាន់៖ ចំណាយ →</button>
             </div>
         </div>
 
         <!-- 5. DAILY EXPENSE TRACKER -->
         <div id="page-expenses" class="hidden fade-in">
-            <h2 class="text-3xl font-header font-bold text-gold mb-6 border-b-2 border-gold pb-2" data-km="តាមដានការចំណាយប្រចាំថ្ងៃ" data-en="Daily Expense Tracker">តាមដានការចំណាយប្រចាំថ្ងៃ</h2>
+            <h2 class="text-3xl font-header font-bold text-gold dark:text-yellow-400 mb-6 border-b-2 border-gold pb-2" data-km="តាមដានការចំណាយប្រចាំថ្ងៃ" data-en="Daily Expense Tracker">តាមដានការចំណាយប្រចាំថ្ងៃ</h2>
 
             <!-- Add Expense Form -->
-            <div class="bg-white p-6 rounded-xl shadow-sm mb-8">
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/50 transition-colors duration-300 mb-8">
                 <h3 class="font-bold text-lg mb-4" data-km="បន្ថែមការចំណាយថ្មី" data-en="Add New Expense">បន្ថែមការចំណាយថ្មី</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-sm font-bold text-gray-600 mb-1" data-km="កាលបរិច្ឆេទ" data-en="Date">កាលបរិច្ឆេទ</label>
-                        <input type="date" id="expDate" class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-gold focus:outline-none">
+                        <label class="block text-sm font-bold text-gray-600 dark:text-gray-300 mb-1" data-km="កាលបរិច្ឆេទ" data-en="Date">កាលបរិច្ឆេទ</label>
+                        <input type="date" id="expDate" class="w-full border dark:border-gray-600 rounded-lg px-4 py-2 bg-white dark:bg-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-gold focus:outline-none transition-colors duration-300">
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-600 mb-1" data-km="ប្រភេទ" data-en="Category">ប្រភេទ</label>
-                        <select id="expCategory" class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-gold focus:outline-none">
+                        <label class="block text-sm font-bold text-gray-600 dark:text-gray-300 mb-1" data-km="ប្រភេទ" data-en="Category">ប្រភេទ</label>
+                        <select id="expCategory" class="w-full border dark:border-gray-600 rounded-lg px-4 py-2 bg-white dark:bg-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-gold focus:outline-none transition-colors duration-300">
                             <option value="food">🍽️ អាហារ</option>
                             <option value="transport">🚗 ដឹកជញ្ជូន</option>
                             <option value="utilities">💡 ទឹក/ភ្លើង</option>
@@ -444,36 +455,36 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-600 mb-1" data-km="ចំនួនទឹកប្រាក់ ($)" data-en="Amount ($)">ចំនួនទឹកប្រាក់ ($)</label>
-                        <input type="number" id="expAmount" step="0.01" placeholder="0.00" class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-gold focus:outline-none">
+                        <label class="block text-sm font-bold text-gray-600 dark:text-gray-300 mb-1" data-km="ចំនួនទឹកប្រាក់ ($)" data-en="Amount ($)">ចំនួនទឹកប្រាក់ ($)</label>
+                        <input type="number" id="expAmount" step="0.01" placeholder="0.00" class="w-full border dark:border-gray-600 rounded-lg px-4 py-2 bg-white dark:bg-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-gold focus:outline-none transition-colors duration-300">
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-600 mb-1" data-km="កំណត់សម្គាល់" data-en="Note">កំណត់សម្គាល់</label>
-                        <input type="text" id="expNote" placeholder="..." class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-gold focus:outline-none">
+                        <label class="block text-sm font-bold text-gray-600 dark:text-gray-300 mb-1" data-km="កំណត់សម្គាល់" data-en="Note">កំណត់សម្គាល់</label>
+                        <input type="text" id="expNote" placeholder="..." class="w-full border dark:border-gray-600 rounded-lg px-4 py-2 bg-white dark:bg-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-gold focus:outline-none transition-colors duration-300">
                     </div>
                 </div>
                 <button onclick="app.addExpense()" class="mt-4 bg-gold text-white px-6 py-2 rounded-lg font-bold hover:bg-yellow-600 transition" data-km="បន្ថែម" data-en="Add">បន្ថែម</button>
             </div>
 
             <!-- Expense Summary -->
-            <div class="bg-white p-6 rounded-xl shadow-sm mb-8">
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/50 transition-colors duration-300 mb-8">
                 <h3 class="font-bold text-lg mb-4" data-km="សរុបការចំណាយប្រចាំខែ" data-en="Monthly Expense Summary">សរុបការចំណាយប្រចាំខែ</h3>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-                    <div class="bg-red-50 p-4 rounded-lg text-center">
-                        <p class="text-sm text-gray-500" data-km="សរុបចំណាយ" data-en="Total Spent">សរុបចំណាយ</p>
-                        <p class="text-xl font-bold text-danger" id="totalSpent">$0.00</p>
+                    <div class="bg-red-50 dark:bg-red-900/30 p-4 rounded-lg text-center transition-colors duration-300">
+                        <p class="text-sm text-gray-500 dark:text-gray-400" data-km="សរុបចំណាយ" data-en="Total Spent">សរុបចំណាយ</p>
+                        <p class="text-xl font-bold text-danger dark:text-red-400" id="totalSpent">$0.00</p>
                     </div>
-                    <div class="bg-green-50 p-4 rounded-lg text-center">
-                        <p class="text-sm text-gray-500" data-km="សល់ពីកញ្ចប់" data-en="Remaining">សល់ពីកញ្ចប់</p>
-                        <p class="text-xl font-bold text-success" id="totalRemaining">$274.92</p>
+                    <div class="bg-green-50 dark:bg-green-900/30 p-4 rounded-lg transition-colors duration-300 text-center">
+                        <p class="text-sm text-gray-500 dark:text-gray-400" data-km="សល់ពីកញ្ចប់" data-en="Remaining">សល់ពីកញ្ចប់</p>
+                        <p class="text-xl font-bold text-success dark:text-green-400" id="totalRemaining">$274.92</p>
                     </div>
-                    <div class="bg-blue-50 p-4 rounded-lg text-center">
-                        <p class="text-sm text-gray-500" data-km="ចំនួនវិក័យប័ត្រ" data-en="Transactions">ចំនួនវិក័យប័ត្រ</p>
-                        <p class="text-xl font-bold text-primary" id="totalTransactions">0</p>
+                    <div class="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg transition-colors duration-300 text-center">
+                        <p class="text-sm text-gray-500 dark:text-gray-400" data-km="ចំនួនវិក័យប័ត្រ" data-en="Transactions">ចំនួនវិក័យប័ត្រ</p>
+                        <p class="text-xl font-bold text-primary dark:text-blue-400" id="totalTransactions">0</p>
                     </div>
-                    <div class="bg-yellow-50 p-4 rounded-lg text-center">
-                        <p class="text-sm text-gray-500" data-km="មធ្យមក្នុងមួយវិក័យប័ត្រ" data-en="Avg per Transaction">មធ្យមក្នុងមួយវិក័យប័ត្រ</p>
-                        <p class="text-xl font-bold text-gold" id="avgTransaction">$0.00</p>
+                    <div class="bg-yellow-50 dark:bg-yellow-900/30 p-4 rounded-lg text-center transition-colors duration-300">
+                        <p class="text-sm text-gray-500 dark:text-gray-400" data-km="មធ្យមក្នុងមួយវិក័យប័ត្រ" data-en="Avg per Transaction">មធ្យមក្នុងមួយវិក័យប័ត្រ</p>
+                        <p class="text-xl font-bold text-gold dark:text-yellow-400" id="avgTransaction">$0.00</p>
                     </div>
                 </div>
                 <div class="chart-wrapper" style="height: 250px;">
@@ -482,13 +493,13 @@
             </div>
 
             <!-- Expense List -->
-            <div class="bg-white p-6 rounded-xl shadow-sm">
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm dark:shadow-gray-900/50 transition-colors duration-300">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="font-bold text-lg" data-km="បញ្ជីការចំណាយ" data-en="Expense List">បញ្ជីការចំណាយ</h3>
-                    <button onclick="app.clearExpenses()" class="text-danger text-sm font-bold hover:underline" data-km="លុបទាំងអស់" data-en="Clear All">លុបទាំងអស់</button>
+                    <button onclick="app.clearExpenses()" class="text-danger dark:text-red-400 text-sm font-bold hover:underline" data-km="លុបទាំងអស់" data-en="Clear All">លុបទាំងអស់</button>
                 </div>
                 <div id="expenseList" class="space-y-2">
-                    <p class="text-gray-400 text-sm text-center py-4" data-km="មិនទាន់មានការចំណាយ" data-en="No expenses yet">មិនទាន់មានការចំណាយ</p>
+                    <p class="text-gray-400 dark:text-gray-500 text-sm text-center py-4" data-km="មិនទាន់មានការចំណាយ" data-en="No expenses yet">មិនទាន់មានការចំណាយ</p>
                 </div>
             </div>
         </div>
@@ -496,7 +507,7 @@
     </main>
 
     <!-- FOOTER -->
-    <footer class="bg-white border-t py-6 text-center text-gray-500 text-sm">
+    <footer class="bg-white dark:bg-gray-800 border-t dark:border-gray-700 py-6 text-center text-gray-500 dark:text-gray-400 text-sm transition-colors duration-300">
         <p data-km="ផ្អែកលើសៀវភៅ &quot;The Richest Man in Babylon&quot; ដោយ George S. Clason • បង្កើតដោយ លីហួរ (Lyhuor)" data-en="Based on 'The Richest Man in Babylon' by George S. Clason • Created by Lyhuor">ផ្អែកលើសៀវភៅ "The Richest Man in Babylon" ដោយ George S. Clason • បង្កើតដោយ លីហួរ (Lyhuor)</p>
     </footer>
 
@@ -504,15 +515,59 @@
     <script>
         const app = {
             lang: 'km',
+            theme: 'light',
             expenses: [],
 
             init: function() {
+                this.loadTheme();
                 this.loadExpenses();
                 this.renderMainChart();
                 this.calcBudget();
                 this.calcGrowth();
                 this.renderCategoryChart();
                 document.getElementById('expDate').valueAsDate = new Date();
+            },
+
+            // --- THEME TOGGLE ---
+            loadTheme: function() {
+                const saved = localStorage.getItem('babylon_theme');
+                if (saved) {
+                    this.theme = saved;
+                } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    this.theme = 'dark';
+                }
+                this.applyTheme();
+            },
+
+            toggleTheme: function() {
+                document.body.classList.add('theme-transition');
+                this.theme = this.theme === 'light' ? 'dark' : 'light';
+                this.applyTheme();
+                localStorage.setItem('babylon_theme', this.theme);
+                setTimeout(() => { document.body.classList.remove('theme-transition'); }, 400);
+            },
+
+            applyTheme: function() {
+                if (this.theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+                const btn = document.getElementById('themeBtn');
+                const btnMobile = document.getElementById('themeBtnMobile');
+                if (btn) btn.textContent = this.theme === 'dark' ? '☀️' : '🌙';
+                if (btnMobile) btnMobile.textContent = this.theme === 'dark' ? '☀️' : '🌙';
+                this.updateChartTheme();
+            },
+
+            isDark: function() {
+                return this.theme === 'dark';
+            },
+
+            updateChartTheme: function() {
+                this.renderMainChart();
+                this.calcGrowth();
+                this.renderCategoryChart();
             },
 
             // --- NAVIGATION ---
@@ -622,6 +677,8 @@
                 // Update growth chart
                 const ctx = document.getElementById('growthChart');
                 if (ctx._chart) ctx._chart.destroy();
+                const textColor = this.isDark() ? '#d1d5db' : '#374151';
+                const gridColor = this.isDark() ? 'rgba(75,85,99,0.3)' : 'rgba(0,0,0,0.05)';
                 ctx._chart = new Chart(ctx, {
                     type: 'line',
                     data: {
@@ -648,7 +705,11 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: { legend: { position: 'top' } }
+                        plugins: { legend: { position: 'top', labels: { color: textColor } } },
+                        scales: {
+                            y: { ticks: { color: textColor }, grid: { color: gridColor } },
+                            x: { ticks: { color: textColor }, grid: { color: gridColor } }
+                        }
                     }
                 });
             },
@@ -713,7 +774,7 @@
                 };
 
                 if (this.expenses.length === 0) {
-                    list.innerHTML = '<p class="text-gray-400 text-sm text-center py-4">' + (this.lang === 'km' ? 'មិនទាន់មានការចំណាយ' : 'No expenses yet') + '</p>';
+                    list.innerHTML = '<p class="text-gray-400 dark:text-gray-500 text-sm text-center py-4">' + (this.lang === 'km' ? 'មិនទាន់មានការចំណាយ' : 'No expenses yet') + '</p>';
                     document.getElementById('totalSpent').textContent = '$0.00';
                     document.getElementById('totalRemaining').textContent = '$274.92';
                     document.getElementById('totalTransactions').textContent = '0';
@@ -725,16 +786,16 @@
                 let html = '';
                 sorted.forEach(e => {
                     const catName = catNames[e.category] ? catNames[e.category][this.lang] : e.category;
-                    html += '<div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition">' +
+                    html += '<div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-300">' +
                         '<div class="flex items-center space-x-3">' +
                         '<span class="text-xl">' + catIcons[e.category] + '</span>' +
                         '<div>' +
                         '<p class="font-bold text-sm">' + catName + (e.note ? ' - ' + e.note : '') + '</p>' +
-                        '<p class="text-xs text-gray-500">' + e.date + '</p>' +
+                        '<p class="text-xs text-gray-500 dark:text-gray-400">' + e.date + '</p>' +
                         '</div></div>' +
                         '<div class="flex items-center space-x-3">' +
-                        '<span class="font-bold text-danger">-$' + e.amount.toFixed(2) + '</span>' +
-                        '<button onclick="app.deleteExpense(' + e.id + ')" class="text-gray-400 hover:text-danger text-lg">✕</button>' +
+                        '<span class="font-bold text-danger dark:text-red-400">-$' + e.amount.toFixed(2) + '</span>' +
+                        '<button onclick="app.deleteExpense(' + e.id + ')" class="text-gray-400 dark:text-gray-500 hover:text-danger dark:text-red-400 text-lg">✕</button>' +
                         '</div></div>';
                 });
                 list.innerHTML = html;
@@ -762,6 +823,8 @@
                     deposits.push(monthly * i);
                     totals.push(parseFloat(balance.toFixed(2)));
                 }
+                const textColor = this.isDark() ? '#d1d5db' : '#374151';
+                const gridColor = this.isDark() ? 'rgba(75,85,99,0.3)' : 'rgba(0,0,0,0.05)';
                 new Chart(ctx, {
                     type: 'line',
                     data: {
@@ -774,8 +837,11 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: { legend: { position: 'top' } },
-                        scales: { y: { beginAtZero: true } }
+                        plugins: { legend: { position: 'top', labels: { color: textColor } } },
+                        scales: {
+                            y: { beginAtZero: true, ticks: { color: textColor }, grid: { color: gridColor } },
+                            x: { ticks: { color: textColor }, grid: { color: gridColor } }
+                        }
                     }
                 });
             },
@@ -788,6 +854,7 @@
                 const labels = ['អាហារ','ដឹកជញ្ជូន','ទឹក/ភ្លើង','ជួលផ្ទះ','សុខភាព','អប់រំ','ផ្សេងៗ'];
                 const data = Object.values(cats);
                 const colors = ['#dc2626','#2563eb','#d97706','#7c3aed','#16a34a','#0891b2','#6b7280'];
+                const textColor = this.isDark() ? '#d1d5db' : '#374151';
                 if (ctx._chart) ctx._chart.destroy();
                 ctx._chart = new Chart(ctx, {
                     type: 'doughnut',
@@ -798,7 +865,7 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: { legend: { position: 'right' } }
+                        plugins: { legend: { position: 'right', labels: { color: textColor } } }
                     }
                 });
             }
