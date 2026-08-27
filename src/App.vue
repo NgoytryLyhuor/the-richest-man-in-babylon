@@ -100,6 +100,7 @@ const navItems = [
   { page: 'laws', to: '/laws', icon: '&#9830;', km: 'ច្បាប់មាស', en: 'Laws of Gold' },
   { page: 'calc', to: '/calc', icon: '&#8721;', km: 'គណនាថវិកា', en: 'Budget Calc' },
   { page: 'grow', to: '/grow', icon: '&#8593;', km: 'ការលូតលាស់', en: 'Growth' },
+  { page: 'notes', to: '/notes', icon: '&#9998;', km: 'សេចក្តីសង្ខេបសៀវភៅ', en: 'Book Notes' },
   { page: 'track', to: '/track', icon: '&#9776;', km: 'តាមដានចំណាយ', en: 'Expenses' },
 ]
 
@@ -108,6 +109,7 @@ const mobileNavItems = [
   { page: 'cures', to: '/cures', icon: '&#9733;', km: 'ព្យាបាល', en: 'Cures' },
   { page: 'calc', to: '/calc', icon: '&#8721;', km: 'គណនា', en: 'Calc' },
   { page: 'grow', to: '/grow', icon: '&#8593;', km: 'លូត', en: 'Grow' },
+  { page: 'notes', to: '/notes', icon: '&#9998;', km: 'សៀវភៅ', en: 'Notes' },
   { page: 'track', to: '/track', icon: '&#9776;', km: 'ចំណាយ', en: 'Spend' },
 ]
 </script>

@@ -10,6 +10,7 @@ const routes = [
   { path: '/calc', name: 'calc', component: () => import('./views/CalcView.vue') },
   { path: '/grow', name: 'grow', component: () => import('./views/GrowView.vue') },
   { path: '/track', name: 'track', component: () => import('./views/TrackView.vue') },
+  { path: '/notes', name: 'notes', component: () => import('./views/BookNotesView.vue') },
 ]
 
 const router = createRouter({

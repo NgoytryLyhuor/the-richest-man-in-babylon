@@ -77,23 +77,26 @@ const monthly = ref(50)
 const rate = ref(3)
 const years = ref(5)
 
+const safeMonthly = computed(() => Math.max(0, monthly.value || 0))
+const safeRate = computed(() => Math.max(0, rate.value || 0))
+
 const growthChartRef = ref(null)
 let chartInstance = null
 
 const calcResult = computed(() => {
-  const mr = rate.value / 100 / 12
+  const mr = safeRate.value / 100 / 12
   const tm = years.value * 12
   let bal = 0
   const labels = [], dep = [], tot = []
   for (let m = 1; m <= tm; m++) {
-    bal = (bal + monthly.value) * (1 + mr)
+    bal = (bal + safeMonthly.value) * (1 + mr)
     if (m % (tm <= 24 ? 1 : tm <= 60 ? 3 : 12) === 0 || m === tm) {
       labels.push(lang.value === 'km' ? 'ខែ ' + m : 'M' + m)
-      dep.push(monthly.value * m)
+      dep.push(safeMonthly.value * m)
       tot.push(parseFloat(bal.toFixed(2)))
     }
   }
-  return { labels, dep, tot, td: monthly.value * tm, int: bal - monthly.value * tm, total: bal }
+  return { labels, dep, tot, td: safeMonthly.value * tm, int: bal - safeMonthly.value * tm, total: bal }
 })
 
 const totalDeposited = computed(() => calcResult.value.td.toFixed(0))

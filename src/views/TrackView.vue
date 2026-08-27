@@ -140,11 +140,12 @@ function save() {
 }
 
 function addExpense() {
-  if (!form.date || !form.amount || form.amount <= 0) {
+  const amt = form.amount || 0
+  if (!form.date || amt <= 0) {
     alert(lang.value === 'km' ? 'សូមបំពេញកាលបរិច្ឆេទ និងទឹកប្រាក់' : 'Fill in date and amount')
     return
   }
-  expenses.value.push({ date: form.date, category: form.category, amount: form.amount, note: form.note, id: Date.now() })
+  expenses.value.push({ date: form.date, category: form.category, amount: amt, note: form.note, id: Date.now() })
   save()
   form.amount = null
   form.note = ''
